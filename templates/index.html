@@ -1,0 +1,245 @@
+<html>
+<head>
+    <title>Government Schemes Information</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"></link>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(to right, #2c3e50, #4ca1af);
+        }
+        .glass {
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .tag {
+            background: rgba(0, 128, 0, 0.7);
+        }
+        .chat-input {
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 25px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        .chat-input:focus {
+            border-color: #4ca1af;
+        }
+        /* Custom scrollbar styles */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(76, 161, 175, 0.8);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(76, 161, 175, 1);
+        }
+        .scrollbar-custom {
+            scrollbar-color: rgba(76, 161, 175, 0.8) rgba(255, 255, 255, 0.1);
+            scrollbar-width: thin;
+        }
+    </style>
+</head>
+<body class="text-white">
+    <div id="root"></div>
+    <script type="text/babel">
+        const { useState } = React;
+
+        function App() {
+            const [isMenuOpen, setIsMenuOpen] = useState(false);
+            const [isChatOpen, setIsChatOpen] = useState(false);
+            const [language, setLanguage] = useState('en');
+
+            const toggleLanguage = () => {
+                setLanguage(prev => (prev === 'en' ? 'hi' : 'en'));
+            };
+
+            return (
+                <div className="flex flex-col h-screen relative">
+                    <Header setIsMenuOpen={setIsMenuOpen} toggleLanguage={toggleLanguage} />
+                    <SidePanel isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
+                    <MainContent language={language} />
+                    <Footer />
+                    <ChatBot isChatOpen={isChatOpen} setIsChatOpen={setIsChatOpen} />
+                </div>
+            );
+        }
+
+        function SidePanel({ isMenuOpen, setIsMenuOpen }) {
+            return (
+                <div className={`fixed inset-0 bg-black bg-opacity-75 z-50 ${isMenuOpen ? 'block' : 'hidden'}`}>
+                    <div className="w-64 p-4 glass flex flex-col items-center h-full">
+                        <div className="w-full flex justify-end">
+                            <button onClick={() => setIsMenuOpen(false)}>
+                                <i className="fas fa-times text-2xl text-white"></i>
+                            </button>
+                        </div>
+                        <div className="mb-6">
+                            <img src="https://placehold.co/100x100" alt="Profile picture of the user" className="rounded-full mb-2" />
+                            <h2 className="text-lg font-bold">Abhishek Kumar</h2>
+                            <p className="text-sm">superananya@gmail.com</p>
+                        </div>
+                        <nav className="flex-1 w-full overflow-auto">
+                            <ul className="space-y-4">
+                                <li className="flex items-center space-x-2">
+                                    <i className="fas fa-home"></i>
+                                    <a href="#" className="hover:underline">Home</a>
+                                </li>
+                                <li className="flex items-center space-x-2">
+                                    <i className="fas fa-tachometer-alt"></i>
+                                    <a href="#" className="hover:underline">Dashboard</a>
+                                </li>
+                                <li className="flex items-center space-x-2">
+                                    <i className="fas fa-upload"></i>
+                                    <a href="#" className="hover:underline">Upload Documents</a>
+                                </li>
+                                <li className="flex items-center space-x-2">
+                                    <i className="fas fa-sync-alt"></i>
+                                    <a href="#" className="hover:underline">Refresh</a>
+                                </li>
+                                <li className="flex items-center space-x-2">
+                                    <i className="fas fa-file-alt"></i>
+                                    <a href="#" className="hover:underline">Documents Uploaded</a>
+                                </li>
+                                <li className="flex items-center space-x-2">
+                                    <i className="fas fa-sign-out-alt"></i>
+                                    <a href="#" className="hover:underline">Logout</a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            );
+        }
+
+        function Header({ setIsMenuOpen, toggleLanguage }) {
+            return (
+                <header className="p-4 glass text-center flex justify-between items-center">
+                    <button onClick={() => setIsMenuOpen(prev => !prev)}>
+                        <i className="fas fa-bars text-2xl"></i>
+                    </button>
+                    <h1 className="text-2xl font-bold">Government Schemes Information</h1>
+                    <button onClick={toggleLanguage}>
+                        <i className="fas fa-globe text-2xl"></i>
+                    </button>
+                </header>
+            );
+        }
+
+        function MainContent({ language }) {
+            const schemes = [
+                { title: 'Pradhan Mantri Jan Dhan Yojana (PMJDY)', tags: ['#financial', '#inclusion'] },
+                { title: 'Pradhan Mantri Awas Yojana (PMAY)', tags: ['#housing', '#urban'] },
+                { title: 'Pradhan Mantri Ujjwala Yojana (PMUY)', tags: ['#LPG', '#women'] },
+                { title: 'Pradhan Mantri Fasal Bima Yojana (PMFBY)', tags: ['#agriculture', '#insurance'] },
+                { title: 'Atal Pension Yojana (APY)', tags: ['#pension', '#retirement'] },
+                { title: 'Swachh Bharat Mission (SBM)', tags: ['#sanitation', '#cleanliness'] }
+            ];
+
+            const suggestedSchemes = [
+                { title: 'Beti Bachao Beti Padhao (BBBP)', tags: ['#women', '#education'] },
+                { title: 'Ayushman Bharat Yojana (ABY)', tags: ['#health', '#insurance'] },
+                { title: 'Digital India', tags: ['#technology', '#digital'] },
+                { title: 'Make in India', tags: ['#manufacturing', '#economy'] },
+                { title: 'Startup India', tags: ['#entrepreneurship', '#innovation'] },
+                { title: 'Stand Up India', tags: ['#entrepreneurship', '#women'] }
+            ];
+
+            return (
+                <main className="flex-1 p-4">
+                    <div className="mb-8">
+                        <h2 className="text-xl font-bold mb-4">{language === 'en' ? 'Available Schemes' : 'उपलब्ध योजनाएं'}</h2>
+                        <div className="flex space-x-4 overflow-x-auto scrollbar-custom">
+                            {schemes.map((scheme, index) => (
+                                <SchemeCard key={index} title={scheme.title} tags={scheme.tags} />
+                            ))}
+                        </div>
+                    </div>
+                    <div>
+                        <h2 className="text-xl font-bold mb-4">{language === 'en' ? 'Suggested Schemes' : 'सुझाई गई योजनाएं'}</h2>
+                        <div className="flex space-x-4 overflow-x-auto scrollbar-custom">
+                            {suggestedSchemes.map((scheme, index) => (
+                                <SchemeCard key={index} title={scheme.title} tags={scheme.tags} />
+                            ))}
+                        </div>
+                    </div>
+                </main>
+            );
+        }
+
+        function SchemeCard({ title, tags }) {
+            return (
+                <div className="glass p-4 rounded-lg min-w-[300px]">
+                    <img src="https://placehold.co/300x200" alt={`Image representing ${title}`} className="rounded-lg mb-4" />
+                    <h3 className="text-lg font-bold mb-2">{title}</h3>
+                    <div className="space-x-2">
+                        {tags.map((tag, index) => (
+                            <span key={index} className="tag text-white px-2 py-1 rounded-full text-xs">{tag}</span>
+                        ))}
+                    </div>
+                </div>
+            );
+        }
+
+        function Footer() {
+            return (
+                <footer className="p-4 glass text-center">
+                    <p>&copy; 2023 Government Schemes Information. All rights reserved.</p>
+                </footer>
+            );
+        }
+
+        function ChatBot({ isChatOpen, setIsChatOpen }) {
+            return (
+                <>
+                    <div className="fixed bottom-4 right-4">
+                        <button className="bg-blue-500 p-4 rounded-full shadow-lg" onClick={() => setIsChatOpen(true)}>
+                            <i className="fas fa-comments text-white text-2xl"></i>
+                        </button>
+                    </div>
+                    {isChatOpen && (
+                        <div className="fixed bottom-16 right-4 w-80 h-96 bg-white text-black p-4 rounded-lg shadow-lg glass flex flex-col">
+                            <div className="flex justify-between items-center mb-4">
+                                <h2 className="text-lg font-bold">Chat with us</h2>
+                                <button onClick={() => setIsChatOpen(false)}>
+                                    <i className="fas fa-times text-xl"></i>
+                                </button>
+                            </div>
+                            <div className="flex-1 overflow-y-auto mb-4">
+                                <div className="flex items-start mb-4">
+                                    <i className="fas fa-robot text-2xl mr-2"></i>
+                                    <div>
+                                        <p className="font-bold">Bot:</p>
+                                        <p>Welcome to the chat! How can we assist you today?</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="flex items-center">
+                                <input type="text" className="w-full p-2 rounded-lg chat-input" placeholder="Type your message..." />
+                                <button className="ml-2 bg-blue-500 p-2 rounded-lg text-white">
+                                    <i className="fas fa-paper-plane"></i>
+                                </button>
+                            </div>
+                        </div>
+                    )}
+                </>
+            );
+        }
+
+        ReactDOM.render(<App />, document.getElementById('root'));
+    </script>
+</body>
+</html>
