@@ -29,8 +29,34 @@ def after_request(response):
 @app.route('/')
 # @login_required
 def home():
-    cat=["elephant , banana , apple , orange , mango , grapes , pineapple , watermelon , kiwi , guava"]
-    return render_template('index.html',cat=cat)
+    schemes = [
+        {
+            "name": "Pradhan Mantri Jan Dhan Yojana",
+            "link": "https://pmjdy.gov.in/",
+            "tags": ["financial", "inclusion"]
+        },
+        {
+            "name": "Ayushman Bharat",
+            "link": "https://www.pmjay.gov.in/",
+            "tags": ["medical", "healthcare"]
+        },
+        {
+            "name": "Pradhan Mantri Awas Yojana",
+            "link": "https://pmaymis.gov.in/",
+            "tags": ["housing", "urban development"]
+        },
+        {
+            "name": "National Scholarship Portal",
+            "link": "https://scholarships.gov.in/",
+            "tags": ["education", "scholarship"]
+        },
+        {
+            "name": "Atal Pension Yojana",
+            "link": "https://npscra.nsdl.co.in/scheme-details/APY.php",
+            "tags": ["financial", "pension"]
+        }
+    ]
+    return render_template('index.html',schemes=schemes)
 
 
 @app.route("/login", methods=["GET", "POST"])

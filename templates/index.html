@@ -178,21 +178,18 @@
 
         function MainContent({ language }) {
             const schemes = [
-                { title: 'Pradhan Mantri Jan Dhan Yojana (PMJDY)', tags: ['#financial', '#inclusion'] },
-                { title: 'Pradhan Mantri Awas Yojana (PMAY)', tags: ['#housing', '#urban'] },
-                { title: 'Pradhan Mantri Ujjwala Yojana (PMUY)', tags: ['#LPG', '#women'] },
-                { title: 'Pradhan Mantri Fasal Bima Yojana (PMFBY)', tags: ['#agriculture', '#insurance'] },
-                { title: 'Atal Pension Yojana (APY)', tags: ['#pension', '#retirement'] },
-                { title: 'Swachh Bharat Mission (SBM)', tags: ['#sanitation', '#cleanliness'] }
+            {% for scheme in schemes %}
+                { title: '{{ scheme.name }}', tags: [{% for tag in scheme.tags %}'{{ tag }}'{% if not loop.last %}, {% endif %}{% endfor %}], link: '{{ scheme.link }}' }{% if not loop.last %}, {% endif %}
+            {% endfor %}
             ];
 
             const suggestedSchemes = [
-                { title: 'Beti Bachao Beti Padhao (BBBP)', tags: ['#women', '#education'] },
-                { title: 'Ayushman Bharat Yojana (ABY)', tags: ['#health', '#insurance'] },
-                { title: 'Digital India', tags: ['#technology', '#digital'] },
-                { title: 'Make in India', tags: ['#manufacturing', '#economy'] },
-                { title: 'Startup India', tags: ['#entrepreneurship', '#innovation'] },
-                { title: 'Stand Up India', tags: ['#entrepreneurship', '#women'] }
+                { title: 'Beti Bachao Beti Padhao (BBBP)', tags: ['#women', '#education'], link: 'https://example.com/bbbp' },
+                { title: 'Ayushman Bharat Yojana (ABY)', tags: ['#health', '#insurance'], link: 'https://example.com/aby' },
+                { title: 'Digital India', tags: ['#technology', '#digital'], link: 'https://example.com/digitalindia' },
+                { title: 'Make in India', tags: ['#manufacturing', '#economy'], link: 'https://example.com/makeinindia' },
+                { title: 'Startup India', tags: ['#entrepreneurship', '#innovation'], link: 'https://example.com/startupindia' },
+                { title: 'Stand Up India', tags: ['#entrepreneurship', '#women'], link: 'https://example.com/standupindia' }
             ];
 
             return (
@@ -201,7 +198,7 @@
                         <h2 className="text-xl font-bold mb-4">{language === 'en' ? 'Available Schemes' : 'उपलब्ध योजनाएं'}</h2>
                         <div className="flex space-x-4 overflow-x-auto scrollbar-custom">
                             {schemes.map((scheme, index) => (
-                                <SchemeCard key={index} title={scheme.title} tags={scheme.tags} />
+                                <SchemeCard key={index} title={scheme.title} tags={scheme.tags} link={scheme.link} />
                             ))}
                         </div>
                     </div>
@@ -209,7 +206,7 @@
                         <h2 className="text-xl font-bold mb-4">{language === 'en' ? 'Suggested Schemes' : 'सुझाई गई योजनाएं'}</h2>
                         <div className="flex space-x-4 overflow-x-auto scrollbar-custom">
                             {suggestedSchemes.map((scheme, index) => (
-                                <SchemeCard key={index} title={scheme.title} tags={scheme.tags} />
+                                <SchemeCard key={index} title={scheme.title} tags={scheme.tags} link={scheme.link} />
                             ))}
                         </div>
                     </div>
@@ -217,17 +214,17 @@
             );
         }
 
-        function SchemeCard({ title, tags }) {
+        function SchemeCard({ title, tags, link }) {
             return (
-                <div className="glass p-4 rounded-lg min-w-[300px]">
-                    <img src="https://placehold.co/300x200" alt={`Image representing ${title}`} className="rounded-lg mb-4" />
-                    <h3 className="text-lg font-bold mb-2">{title}</h3>
-                    <div className="space-x-2">
-                        {tags.map((tag, index) => (
-                            <span key={index} className="tag text-white px-2 py-1 rounded-full text-xs">{tag}</span>
-                        ))}
-                    </div>
+            <div className="glass p-4 rounded-lg min-w-[300px] cursor-pointer" onClick={() => window.location.href = link}>
+                <img src="https://placehold.co/300x200" alt={`Image representing ${title}`} className="rounded-lg mb-4" />
+                <h3 className="text-lg font-bold mb-2">{title}</h3>
+                <div className="space-x-2">
+                {tags.map((tag, index) => (
+                    <span key={index} className="tag text-white px-2 py-1 rounded-full text-xs">{tag}</span>
+                ))}
                 </div>
+            </div>
             );
         }
 
