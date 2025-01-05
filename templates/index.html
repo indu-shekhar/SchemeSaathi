@@ -7,6 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"></link>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
     <style>
         body {
             font-family: 'Roboto', sans-serif;
@@ -50,6 +51,39 @@
         .scrollbar-custom {
             scrollbar-color: rgba(76, 161, 175, 0.8) rgba(255, 255, 255, 0.1);
             scrollbar-width: thin;
+        }
+        .goog-te-banner-frame.skiptranslate { display: none !important; }
+        body { top: 0px !important; }
+        .goog-te-gadget-simple {
+            background-color: #f9f9f9;
+            border: 1px solid #ccc;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-family: 'Roboto', sans-serif;
+            display: inline-flex;
+            align-items: center;
+        }
+        .goog-te-gadget-icon {
+            background-image: url('https://translate.googleapis.com/translate_static/img/te_ctrl3.gif');
+            background-position: -65px 0px;
+            width: 16px;
+            height: 16px;
+            margin-right: 8px;
+        }
+        .goog-te-gadget-simple a {
+            color: #333;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        .goog-te-gadget-simple a:hover {
+            text-decoration: underline;
+        }
+        .goog-te-gadget-simple .VIpgJd-ZVi9od-xl07Ob-lTBxed {
+            display: flex;
+            align-items: center;
+        }
+        .goog-te-gadget-simple .VIpgJd-ZVi9od-xl07Ob-lTBxed span {
+            margin-right: 5px;
         }
     </style>
 </head>
@@ -132,9 +166,12 @@
                         <i className="fas fa-bars text-2xl"></i>
                     </button>
                     <h1 className="text-2xl font-bold">Government Schemes Information</h1>
-                    <button onClick={toggleLanguage}>
-                        <i className="fas fa-globe text-2xl"></i>
-                    </button>
+                    <div className="flex items-center space-x-4">
+                        <div id="google_translate_element"></div>
+                        <button onClick={toggleLanguage}>
+                            <i className="fas fa-globe text-2xl"></i>
+                        </button>
+                    </div>
                 </header>
             );
         }
@@ -237,6 +274,14 @@
                     )}
                 </>
             );
+        }
+
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'en',
+                includedLanguages: 'en,hi,te,kn,ta,ml,gu,mr,bn,pa,or,as,ur,sd,si,ne,sa,ks,mai,doi,brx,mlt',
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+            }, 'google_translate_element');
         }
 
         ReactDOM.render(<App />, document.getElementById('root'));

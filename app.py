@@ -27,7 +27,7 @@ def after_request(response):
 
 
 @app.route('/')
-@login_required
+# @login_required
 def home():
     cat=["elephant , banana , apple , orange , mango , grapes , pineapple , watermelon , kiwi , guava"]
     return render_template('index.html',cat=cat)
@@ -46,7 +46,7 @@ def login():
         if not request.form.get("username"):
             return apology("must provide username", 400)
 
-        # Ensure password was submitted
+        # Ensure password was submitted21``
         elif not request.form.get("password"):
             return apology("must provide password", 400)
 

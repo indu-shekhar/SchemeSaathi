@@ -1,0 +1,281 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SchemeSaathi - Government Scheme Registration</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <style>
+        .goog-te-banner-frame.skiptranslate { display: none !important; }
+        body { top: 0px !important; }
+        .goog-te-gadget-simple {
+            background-color: #f9f9f9;
+            border: 1px solid #ccc;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-family: 'Roboto', sans-serif;
+            display: inline-flex;
+            align-items: center;
+        }
+        .goog-te-gadget-icon {
+            background-image: url('https://translate.googleapis.com/translate_static/img/te_ctrl3.gif');
+            background-position: -65px 0px;
+            width: 16px;
+            height: 16px;
+            margin-right: 8px;
+        }
+        .goog-te-gadget-simple a {
+            color: #333;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        .goog-te-gadget-simple a:hover {
+            text-decoration: underline;
+        }
+        .goog-te-gadget-simple .VIpgJd-ZVi9od-xl07Ob-lTBxed {
+            display: flex;
+            align-items: center;
+        }
+        .goog-te-gadget-simple .VIpgJd-ZVi9od-xl07Ob-lTBxed span {
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-r from-gray-800 to-blue-500 font-roboto text-white">
+    <header class="flex justify-between items-center p-4 bg-gray-900">
+        <div class="flex items-center space-x-2">
+            <img alt="Indian flag icon" class="w-8 h-5" height="20" src="https://storage.googleapis.com/a1aa/image/e74Mae011QgoOUZqOIJkkW7YNcGfcuC8hmfBqgUVuJX4kLHQB.jpg" width="30">
+            <h1 class="text-3xl font-bold">SchemSaathi</h1>
+        </div>
+        <div class="flex items-center space-x-4">
+            <div id="google_translate_element"></div>
+        </div>
+    </header>
+    <main class="flex justify-center items-center min-h-screen">
+        <div class="bg-white text-gray-800 rounded-lg shadow-lg p-8 w-full max-w-2xl">
+            <h2 class="text-2xl font-bold mb-4 text-center">User Registration</h2>
+            <form id="registrationForm" onsubmit="return validateForm()">
+                <!-- Personal Details -->
+                <div class="form-section" id="personalDetails">
+                    <h3 class="text-xl font-semibold mb-4">Personal Details</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                        <div>
+                            <label class="block text-sm font-medium" for="firstName">First Name</label>
+                            <input class="mt-1 block w-full border border-gray-400 rounded-md shadow-sm" id="firstName" type="text" placeholder="First Name" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium" for="middleName">Middle Name</label>
+                            <input class="mt-1 block w-full border border-gray-400 rounded-md shadow-sm" id="middleName" type="text" placeholder="Middle Name (Optional)">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium" for="lastName">Last Name</label>
+                            <input class="mt-1 block w-full border border-gray-400 rounded-md shadow-sm" id="lastName" type="text" placeholder="Last Name (Optional)">
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label class="block text-sm font-medium" for="age">Age</label>
+                            <input class="mt-1 block w-full border border-gray-400 rounded-md shadow-sm" id="age" min="0" type="number" placeholder="Age" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium" for="dob">Date of Birth</label>
+                            <input class="mt-1 block w-full border border-gray-400 rounded-md shadow-sm" id="dob" type="date" required>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label class="block text-sm font-medium" for="gender">Gender</label>
+                            <select class="mt-1 block w-full border border-gray-400 rounded-md shadow-sm" id="gender" required>
+                                <option value="">Select Gender</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium" for="maritalStatus">Marital Status</label>
+                            <select class="mt-1 block w-full border border-gray-400 rounded-md shadow-sm" id="maritalStatus" required>
+                                <option value="">Select Marital Status</option>
+                                <option value="single">Single</option>
+                                <option value="married">Married</option>
+                                <option value="divorced">Divorced</option>
+                                <option value="widowed">Widowed</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium" for="phoneNumber">Phone Number</label>
+                        <input class="mt-1 block w-full border border-gray-400 rounded-md shadow-sm" id="phoneNumber" type="tel" maxlength="10" pattern="\d{10}" title="Please enter exactly 10 digits" placeholder="91+ Phone Number" required oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10)">
+                    </div>
+                    <div class="flex justify-between">
+                        <button class="bg-blue-500 text-white px-4 py-2 rounded-md" onclick="showNextSection('addressDetails')" type="button">Next</button>
+                    </div>
+                </div>
+                <!-- Address Details -->
+                <div class="form-section hidden" id="addressDetails">
+                    <h3 class="text-xl font-semibold mb-4">Address Details</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label class="block text-sm font-medium" for="villageCity">Village/City</label>
+                            <input class="mt-1 block w-full border border-gray-400 rounded-md shadow-sm" id="villageCity" type="text" placeholder="Village/City" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium" for="district">District</label>
+                            <input class="mt-1 block w-full border border-gray-400 rounded-md shadow-sm" id="district" type="text" placeholder="District" required>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label class="block text-sm font-medium" for="state">State</label>
+                            <input class="mt-1 block w-full border border-gray-400 rounded-md shadow-sm" id="state" type="text" placeholder="State" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium" for="country">Country</label>
+                            <input class="mt-1 block w-full border border-gray-400 rounded-md shadow-sm" id="country" type="text" placeholder="Country" required>
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium" for="pincode">Pincode</label>
+                        <input class="mt-1 block w-full border border-gray-400 rounded-md shadow-sm" id="pincode" type="text" placeholder="Pincode" required>
+                    </div>
+                    <div class="flex justify-between">
+                        <button class="bg-gray-500 text-white px-4 py-2 rounded-md" onclick="showPreviousSection('personalDetails')" type="button">Back</button>
+                        <button class="bg-blue-500 text-white px-4 py-2 rounded-md" onclick="showNextSection('familyDetails')" type="button">Next</button>
+                    </div>
+                </div>
+                <!-- Family Details -->
+                <div class="form-section hidden" id="familyDetails">
+                    <h3 class="text-xl font-semibold mb-4">Family Details</h3>
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium" for="partnerName">Partner Name</label>
+                        <input class="mt-1 block w-full border border-gray-400 rounded-md shadow-sm" id="partnerName" type="text" placeholder="Partner Name (Optional)">
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium" for="parentNames">Parent Names</label>
+                        <input class="mt-1 block w-full border border-gray-400 rounded-md shadow-sm" id="parentNames" type="text" placeholder="Parent Names (Optional)">
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium" for="childrenDetails">Children Details</label>
+                        <textarea class="mt-1 block w-full border border-gray-400 rounded-md shadow-sm" id="childrenDetails" rows="3" placeholder="Children Details (Optional)"></textarea>
+                    </div>
+                    <div class="flex justify-between">
+                        <button class="bg-gray-500 text-white px-4 py-2 rounded-md" onclick="showPreviousSection('addressDetails')" type="button">Back</button>
+                        <button class="bg-blue-500 text-white px-4 py-2 rounded-md" onclick="showNextSection('aadharDetails')" type="button">Next</button>
+                    </div>
+                </div>
+                <!-- Aadhar Details -->
+                <div class="form-section hidden" id="aadharDetails">
+                    <h3 class="text-xl font-semibold mb-4">Aadhar Details</h3>
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium" for="aadharNumber">Aadhar Number</label>
+                        <input class="mt-1 block w-full border border-gray-400 rounded-md shadow-sm" id="aadharNumber" type="text" placeholder="Aadhar Number" maxlength="12" pattern="\d{12}" title="Please enter exactly 12 digits" required oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 12)">
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium" for="aadharCopy">Upload Aadhar Copy</label>
+                        <input class="mt-1 block w-full border border-gray-400 rounded-md shadow-sm" id="aadharCopy" type="file" required>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label class="block text-sm font-medium" for="password">Password</label>
+                            <input class="mt-1 block w-full border border-gray-400 rounded-md shadow-sm" id="password" type="password" placeholder="Enter Password" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium" for="confirmPassword">Confirm Password</label>
+                            <input class="mt-1 block w-full border border-gray-400 rounded-md shadow-sm" id="confirmPassword" type="password" placeholder="Confirm Password" required>
+                        </div>
+                    </div>
+                    <div class="flex justify-between">
+                        <button class="bg-gray-500 text-white px-4 py-2 rounded-md" onclick="showPreviousSection('familyDetails')" type="button">Back</button>
+                        <button class="bg-green-500 text-white px-4 py-2 rounded-md" type="submit">Submit</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </main>
+    <footer class="bg-gray-900 text-white p-4">
+        <div class="container mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                    <h4 class="text-lg font-semibold mb-2">Important Links</h4>
+                    <ul>
+                        <li><a href="https://www.india.gov.in/" class="text-blue-400 hover:underline">India.gov.in</a></li>
+                        <li><a href="https://www.mygov.in/" class="text-blue-400 hover:underline">MyGov</a></li>
+                        <li><a href="https://www.pmindia.gov.in/" class="text-blue-400 hover:underline">Prime Minister of India</a></li>
+                        <li><a href="https://www.digitalindia.gov.in/" class="text-blue-400 hover:underline">Digital India</a></li>
+                        <li><a href="https://www.makeinindia.com/" class="text-blue-400 hover:underline">Make in India</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-2">Government Services</h4>
+                    <ul>
+                        <li><a href="https://uidai.gov.in/" class="text-blue-400 hover:underline">UIDAI</a></li>
+                        <li><a href="https://www.incometaxindia.gov.in/" class="text-blue-400 hover:underline">Income Tax Department</a></li>
+                        <li><a href="https://www.india.gov.in/topics/governance-administration/e-governance" class="text-blue-400 hover:underline">e-Governance</a></li>
+                        <li><a href="https://www.india.gov.in/topics/governance-administration" class="text-blue-400 hover:underline">Governance & Administration</a></li>
+                        <li><a href="https://www.india.gov.in/topics/education" class="text-blue-400 hover:underline">Education</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-2">Contact Us</h4>
+                    <p>Government of India</p>
+                    <p>Email: <a href="mailto:info@india.gov.in" class="text-blue-400 hover:underline">info@india.gov.in</a></p>
+                    <p>Phone: <a href="tel:+911123456789" class="text-blue-400 hover:underline">+91-11-23456789</a></p>
+                </div>
+            </div>
+            <div class="text-center mt-4">
+                <p>&copy; 2023 SchemSaathi. All rights reserved.</p>
+                <a class="text-blue-400 hover:underline" href="https://mysaathiwebsite.com">Visit MySaathi Website</a>
+            </div>
+        </div>
+    </footer>
+    <script>
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'en',
+                includedLanguages: 'en,hi,te,kn,ta,ml,gu,mr,bn,pa,or,as,ur,sd,si,ne,sa,ks,mai,doi,brx,mlt',
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+            }, 'google_translate_element');
+        }
+
+        function showNextSection(sectionId) {
+            const currentSection = document.querySelector('.form-section:not(.hidden)');
+            const inputs = currentSection.querySelectorAll('input, select, textarea');
+            let valid = true;
+            inputs.forEach(input => {
+                if (!input.value && input.hasAttribute('required')) {
+                    valid = false;
+                    input.classList.add('border-red-500');
+                } else {
+                    input.classList.remove('border-red-500');
+                }
+            });
+            if (valid) {
+                currentSection.classList.add('hidden');
+                document.getElementById(sectionId).classList.remove('hidden');
+            }
+        }
+
+        function showPreviousSection(sectionId) {
+            document.querySelector('.form-section:not(.hidden)').classList.add('hidden');
+            document.getElementById(sectionId).classList.remove('hidden');
+        }
+
+        function validateForm() {
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const aadharNumber = document.getElementById('aadharNumber').value;
+            if (password !== confirmPassword) {
+                alert('Passwords do not match.');
+                return false;
+            }
+            if (aadharNumber.length !== 12) {
+                alert('Aadhar number must be exactly 12 digits.');
+                return false;
+            }
+            return true;
+        }
+    </script>
+</body>
+</html>
