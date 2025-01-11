@@ -56,38 +56,38 @@
     <main class="flex justify-center items-center min-h-screen">
         <div class="bg-white text-gray-800 rounded-lg shadow-lg p-8 w-full max-w-2xl">
             <h2 class="text-2xl font-bold mb-4 text-center">User Registration</h2>
-            <form id="registrationForm" onsubmit="return validateForm()">
+            <form id="registrationForm" action="/register" method="POST" enctype="multipart/form-data" onsubmit="return validateForm()">
                 <!-- Personal Details -->
                 <div class="form-section" id="personalDetails">
                     <h3 class="text-xl font-semibold mb-4">Personal Details</h3>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                         <div>
                             <label class="block text-sm font-medium" for="firstName">First Name</label>
-                            <input class="mt-1 block w-full border border-gray-400 rounded-md shadow-sm" id="firstName" type="text" placeholder="First Name" required>
+                            <input class="mt-1 block w-full border border-gray-400 rounded-md shadow-sm" id="firstName" name="firstName" type="text" placeholder="First Name" required>
                         </div>
                         <div>
                             <label class="block text-sm font-medium" for="middleName">Middle Name</label>
-                            <input class="mt-1 block w-full border border-gray-400 rounded-md shadow-sm" id="middleName" type="text" placeholder="Middle Name (Optional)">
+                            <input class="mt-1 block w-full border border-gray-400 rounded-md shadow-sm" id="middleName" name="middleName" type="text" placeholder="Middle Name (Optional)">
                         </div>
                         <div>
                             <label class="block text-sm font-medium" for="lastName">Last Name</label>
-                            <input class="mt-1 block w-full border border-gray-400 rounded-md shadow-sm" id="lastName" type="text" placeholder="Last Name (Optional)">
+                            <input class="mt-1 block w-full border border-gray-400 rounded-md shadow-sm" id="lastName" name="lastName" type="text" placeholder="Last Name (Optional)">
                         </div>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                         <div>
                             <label class="block text-sm font-medium" for="age">Age</label>
-                            <input class="mt-1 block w-full border border-gray-400 rounded-md shadow-sm" id="age" min="0" type="number" placeholder="Age" required>
+                            <input class="mt-1 block w-full border border-gray-400 rounded-md shadow-sm" id="age" name="age" min="0" type="number" placeholder="Age" required>
                         </div>
                         <div>
                             <label class="block text-sm font-medium" for="dob">Date of Birth</label>
-                            <input class="mt-1 block w-full border border-gray-400 rounded-md shadow-sm" id="dob" type="date" required>
+                            <input class="mt-1 block w-full border border-gray-400 rounded-md shadow-sm" id="dob" name="dob" type="date" required>
                         </div>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                         <div>
                             <label class="block text-sm font-medium" for="gender">Gender</label>
-                            <select class="mt-1 block w-full border border-gray-400 rounded-md shadow-sm" id="gender" required>
+                            <select class="mt-1 block w-full border border-gray-400 rounded-md shadow-sm" id="gender" name="gender" required>
                                 <option value="">Select Gender</option>
                                 <option value="male">Male</option>
                                 <option value="female">Female</option>
@@ -96,7 +96,7 @@
                         </div>
                         <div>
                             <label class="block text-sm font-medium" for="maritalStatus">Marital Status</label>
-                            <select class="mt-1 block w-full border border-gray-400 rounded-md shadow-sm" id="maritalStatus" required>
+                            <select class="mt-1 block w-full border border-gray-400 rounded-md shadow-sm" id="maritalStatus" name="maritalStatus" required>
                                 <option value="">Select Marital Status</option>
                                 <option value="single">Single</option>
                                 <option value="married">Married</option>
@@ -107,7 +107,7 @@
                     </div>
                     <div class="mb-4">
                         <label class="block text-sm font-medium" for="phoneNumber">Phone Number</label>
-                        <input class="mt-1 block w-full border border-gray-400 rounded-md shadow-sm" id="phoneNumber" type="tel" maxlength="10" pattern="\d{10}" title="Please enter exactly 10 digits" placeholder="91+ Phone Number" required oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10)">
+                        <input class="mt-1 block w-full border border-gray-400 rounded-md shadow-sm" id="phoneNumber" name="phoneNumber" type="tel" maxlength="10" pattern="\d{10}" title="Please enter exactly 10 digits" placeholder="91+ Phone Number" required oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10)">
                     </div>
                     <div class="flex justify-between">
                         <button class="bg-blue-500 text-white px-4 py-2 rounded-md" onclick="showNextSection('addressDetails')" type="button">Next</button>
@@ -119,26 +119,26 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                         <div>
                             <label class="block text-sm font-medium" for="villageCity">Village/City</label>
-                            <input class="mt-1 block w-full border border-gray-400 rounded-md shadow-sm" id="villageCity" type="text" placeholder="Village/City" required>
+                            <input class="mt-1 block w-full border border-gray-400 rounded-md shadow-sm" id="villageCity" name="villageCity" type="text" placeholder="Village/City" required>
                         </div>
                         <div>
                             <label class="block text-sm font-medium" for="district">District</label>
-                            <input class="mt-1 block w-full border border-gray-400 rounded-md shadow-sm" id="district" type="text" placeholder="District" required>
+                            <input class="mt-1 block w-full border border-gray-400 rounded-md shadow-sm" id="district" name="district" type="text" placeholder="District" required>
                         </div>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                         <div>
                             <label class="block text-sm font-medium" for="state">State</label>
-                            <input class="mt-1 block w-full border border-gray-400 rounded-md shadow-sm" id="state" type="text" placeholder="State" required>
+                            <input class="mt-1 block w-full border border-gray-400 rounded-md shadow-sm" id="state" name="state" type="text" placeholder="State" required>
                         </div>
                         <div>
                             <label class="block text-sm font-medium" for="country">Country</label>
-                            <input class="mt-1 block w-full border border-gray-400 rounded-md shadow-sm" id="country" type="text" placeholder="Country" required>
+                            <input class="mt-1 block w-full border border-gray-400 rounded-md shadow-sm" id="country" name="country" type="text" placeholder="Country" required>
                         </div>
                     </div>
                     <div class="mb-4">
                         <label class="block text-sm font-medium" for="pincode">Pincode</label>
-                        <input class="mt-1 block w-full border border-gray-400 rounded-md shadow-sm" id="pincode" type="text" placeholder="Pincode" required>
+                        <input class="mt-1 block w-full border border-gray-400 rounded-md shadow-sm" id="pincode" name="pincode" type="text" placeholder="Pincode" required>
                     </div>
                     <div class="flex justify-between">
                         <button class="bg-gray-500 text-white px-4 py-2 rounded-md" onclick="showPreviousSection('personalDetails')" type="button">Back</button>
@@ -150,15 +150,15 @@
                     <h3 class="text-xl font-semibold mb-4">Family Details</h3>
                     <div class="mb-4">
                         <label class="block text-sm font-medium" for="partnerName">Partner Name</label>
-                        <input class="mt-1 block w-full border border-gray-400 rounded-md shadow-sm" id="partnerName" type="text" placeholder="Partner Name (Optional)">
+                        <input class="mt-1 block w-full border border-gray-400 rounded-md shadow-sm" id="partnerName" name="partnerName" type="text" placeholder="Partner Name (Optional)">
                     </div>
                     <div class="mb-4">
                         <label class="block text-sm font-medium" for="parentNames">Parent Names</label>
-                        <input class="mt-1 block w-full border border-gray-400 rounded-md shadow-sm" id="parentNames" type="text" placeholder="Parent Names (Optional)">
+                        <input class="mt-1 block w-full border border-gray-400 rounded-md shadow-sm" id="parentNames" name="parentNames" type="text" placeholder="Parent Names (Optional)">
                     </div>
                     <div class="mb-4">
                         <label class="block text-sm font-medium" for="childrenDetails">Children Details</label>
-                        <textarea class="mt-1 block w-full border border-gray-400 rounded-md shadow-sm" id="childrenDetails" rows="3" placeholder="Children Details (Optional)"></textarea>
+                        <textarea class="mt-1 block w-full border border-gray-400 rounded-md shadow-sm" id="childrenDetails" name="childrenDetails" rows="3" placeholder="Children Details (Optional)"></textarea>
                     </div>
                     <div class="flex justify-between">
                         <button class="bg-gray-500 text-white px-4 py-2 rounded-md" onclick="showPreviousSection('addressDetails')" type="button">Back</button>
@@ -170,20 +170,20 @@
                     <h3 class="text-xl font-semibold mb-4">Aadhar Details</h3>
                     <div class="mb-4">
                         <label class="block text-sm font-medium" for="aadharNumber">Aadhar Number</label>
-                        <input class="mt-1 block w-full border border-gray-400 rounded-md shadow-sm" id="aadharNumber" type="text" placeholder="Aadhar Number" maxlength="12" pattern="\d{12}" title="Please enter exactly 12 digits" required oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 12)">
+                        <input class="mt-1 block w-full border border-gray-400 rounded-md shadow-sm" id="aadharNumber" name="aadharNumber" type="text" placeholder="Aadhar Number" maxlength="12" pattern="\d{12}" title="Please enter exactly 12 digits" required oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 12)">
                     </div>
                     <div class="mb-4">
                         <label class="block text-sm font-medium" for="aadharCopy">Upload Aadhar Copy</label>
-                        <input class="mt-1 block w-full border border-gray-400 rounded-md shadow-sm" id="aadharCopy" type="file" required>
+                        <input class="mt-1 block w-full border border-gray-400 rounded-md shadow-sm" id="aadharCopy" name="aadharCopy" type="file" required>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                         <div>
                             <label class="block text-sm font-medium" for="password">Password</label>
-                            <input class="mt-1 block w-full border border-gray-400 rounded-md shadow-sm" id="password" type="password" placeholder="Enter Password" required>
+                            <input class="mt-1 block w-full border border-gray-400 rounded-md shadow-sm" id="password" name="password" type="password" placeholder="Enter Password" required>
                         </div>
                         <div>
                             <label class="block text-sm font-medium" for="confirmPassword">Confirm Password</label>
-                            <input class="mt-1 block w-full border border-gray-400 rounded-md shadow-sm" id="confirmPassword" type="password" placeholder="Confirm Password" required>
+                            <input class="mt-1 block w-full border border-gray-400 rounded-md shadow-sm" id="confirmPassword" name="confirmPassword" type="password" placeholder="Confirm Password" required>
                         </div>
                     </div>
                     <div class="flex justify-between">
