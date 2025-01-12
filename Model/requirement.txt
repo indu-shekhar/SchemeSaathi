@@ -3,3 +3,7 @@ sentence-transformers
 opencv-python
 pytesseract
 googletrans==4.0.0-rc1
+sudo apt update
+sudo apt install -y libgl1-mesa-glx libglib2.0-0 libsm6
+sudo apt install -y mesa-utils
+easyocr

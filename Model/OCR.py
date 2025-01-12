@@ -48,7 +48,8 @@ def easyocr_extract_text(image_path):
 def preprocess_image(image_path):
     # Load the image
     image = cv2.imread(image_path)
-    
+    if image is None:
+        raise ValueError(f"Image not found or unable to load: {image_path}")
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     
     return gray
