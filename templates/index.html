@@ -85,6 +85,25 @@
         .goog-te-gadget-simple .VIpgJd-ZVi9od-xl07Ob-lTBxed span {
             margin-right: 5px;
         }
+        .chat-container {
+            background: rgba(44, 62, 80, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .chat-header {
+            background: linear-gradient(to right, #2c3e50, #3498db);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .chat-messages {
+            background: rgba(25, 35, 45, 0.95);
+        }
+
+        .chat-input-container {
+            background: rgba(44, 62, 80, 0.95);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
     </style>
 </head>
 <body class="text-white">
@@ -230,43 +249,172 @@
 
         function Footer() {
             return (
-                <footer className="p-4 glass text-center">
-                    <p>&copy; 2023 Government Schemes Information. All rights reserved.</p>
+                <footer class="bg-gray-900 text-white p-4 pt-20">
+                    <div class="container mx-auto">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div>
+                                <h3 class="text-lg font-semibold mb-2">Important Links</h3>
+                                <ul>
+                                    <li><a href="https://www.india.gov.in/" class="text-blue-400 hover:underline">India.gov.in</a></li>
+                                    <li><a href="https://www.mygov.in/" class="text-blue-400 hover:underline">MyGov</a></li>
+                                    <li><a href="https://www.digitalindia.gov.in/" class="text-blue-400 hover:underline">Digital India</a></li>
+                                    <li><a href="https://www.uidai.gov.in/" class="text-blue-400 hover:underline">UIDAI</a></li>
+                                    <li><a href="https://www.incometaxindia.gov.in/" class="text-blue-400 hover:underline">Income Tax Department</a></li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-semibold mb-2">Government Services</h3>
+                                <ul>
+                                    <li><a href="https://www.epfindia.gov.in/" class="text-blue-400 hover:underline">EPFO</a></li>
+                                    <li><a href="https://www.nvsp.in/" class="text-blue-400 hover:underline">NVSP</a></li>
+                                    <li><a href="https://www.passportindia.gov.in/" class="text-blue-400 hover:underline">Passport Seva</a></li>
+                                    <li><a href="https://www.irctc.co.in/" class="text-blue-400 hover:underline">IRCTC</a></li>
+                                    <li><a href="https://www.indiapost.gov.in/" class="text-blue-400 hover:underline">India Post</a></li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-semibold mb-2">Contact Us</h3>
+                                <p>Government of India</p>
+                                <p>Email: contact@india.gov.in</p>
+                                <p>Phone: +91-11-23012345</p>
+                            </div>
+                        </div>
+                        <div class="text-center mt-4">
+                            <p>&copy; 2023 SchemSaathi. All rights reserved.</p>
+                            <a class="text-blue-400" href="https://mysaathiwebsite.com">Visit MySaathi Website</a>
+                        </div>
+                    </div>
                 </footer>
             );
         }
 
         function ChatBot({ isChatOpen, setIsChatOpen }) {
+            const [messages, setMessages] = useState([
+                {
+                    sender: 'bot',
+                    text: 'Welcome to SchemSaathi! How can I help you today?'
+                }
+            ]);
+            const [inputMessage, setInputMessage] = useState('');
+            const messagesEndRef = React.useRef(null);
+
+            const scrollToBottom = () => {
+                messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+            };
+
+            React.useEffect(() => {
+                scrollToBottom();
+            }, [messages]);
+
+            const handleSubmit = async (e) => {
+                e.preventDefault();
+                if (!inputMessage.trim()) return;
+
+                // Add user message
+                const userMessage = {
+                    sender: 'user',
+                    text: inputMessage
+                };
+                setMessages(prev => [...prev, userMessage]);
+                setInputMessage('');
+
+                try {
+                    const response = await fetch('/chat', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ message: inputMessage }),
+                    });
+
+                    const data = await response.json();
+                    
+                    // Add bot response
+                    const botMessage = {
+                        sender: 'bot',
+                        text: data.response
+                    };
+                    setMessages(prev => [...prev, botMessage]);
+                } catch (error) {
+                    console.error('Error:', error);
+                    // Add error message
+                    const errorMessage = {
+                        sender: 'bot',
+                        text: 'Sorry, I encountered an error. Please try again.'
+                    };
+                    setMessages(prev => [...prev, errorMessage]);
+                }
+            };
+
             return (
                 <>
                     <div className="fixed bottom-4 right-4">
-                        <button className="bg-blue-500 p-4 rounded-full shadow-lg" onClick={() => setIsChatOpen(true)}>
-                            <i className="fas fa-comments text-white text-2xl"></i>
+                        <button 
+                            className="bg-blue-500 p-4 rounded-full shadow-lg hover:bg-blue-600 transition-colors"
+                            onClick={() => setIsChatOpen(!isChatOpen)}
+                        >
+                            <i className={`fas ${isChatOpen ? 'fa-times' : 'fa-comments'} text-white text-2xl`}></i>
                         </button>
                     </div>
                     {isChatOpen && (
-                        <div className="fixed bottom-16 right-4 w-80 h-96 bg-white text-black p-4 rounded-lg shadow-lg glass flex flex-col">
-                            <div className="flex justify-between items-center mb-4">
-                                <h2 className="text-lg font-bold">Chat with us</h2>
-                                <button onClick={() => setIsChatOpen(false)}>
+                        <div className="fixed bottom-20 right-4 w-96 h-[32rem] rounded-lg shadow-2xl overflow-hidden flex flex-col chat-container transition-all duration-300 ease-in-out">
+                            <div className="chat-header text-white p-4 flex justify-between items-center">
+                                <div className="flex items-center">
+                                    <i className="fas fa-robot text-2xl mr-2"></i>
+                                    <h2 className="text-lg font-bold">SchemSaathi Assistant</h2>
+                                </div>
+                                <button onClick={() => setIsChatOpen(false)} className="hover:text-gray-300 transition-colors">
                                     <i className="fas fa-times text-xl"></i>
                                 </button>
                             </div>
-                            <div className="flex-1 overflow-y-auto mb-4">
-                                <div className="flex items-start mb-4">
-                                    <i className="fas fa-robot text-2xl mr-2"></i>
-                                    <div>
-                                        <p className="font-bold">Bot:</p>
-                                        <p>Welcome to the chat! How can we assist you today?</p>
+                            <div className="flex-1 overflow-y-auto p-4 chat-messages">
+                                {messages.map((message, index) => (
+                                    <div
+                                        key={index}
+                                        className={`flex items-start mb-4 ${
+                                            message.sender === 'user' ? 'justify-end' : 'justify-start'
+                                        }`}
+                                    >
+                                        {message.sender === 'bot' && (
+                                            <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white rounded-full p-2 mr-2 shadow-lg">
+                                                <i className="fas fa-robot"></i>
+                                            </div>
+                                        )}
+                                        <div
+                                            className={`max-w-[70%] rounded-lg p-3 shadow-lg ${
+                                                message.sender === 'user'
+                                                    ? 'bg-gradient-to-r from-blue-600 to-blue-800 text-white'
+                                                    : 'bg-white text-gray-800'
+                                            }`}
+                                        >
+                                            <p>{message.text}</p>
+                                        </div>
+                                        {message.sender === 'user' && (
+                                            <div className="bg-gradient-to-r from-green-600 to-green-800 text-white rounded-full p-2 ml-2 shadow-lg">
+                                                <i className="fas fa-user"></i>
+                                            </div>
+                                        )}
                                     </div>
+                                ))}
+                                <div ref={messagesEndRef} />
+                            </div>
+                            <form onSubmit={handleSubmit} className="p-4 chat-input-container">
+                                <div className="flex items-center">
+                                    <input
+                                        type="text"
+                                        value={inputMessage}
+                                        onChange={(e) => setInputMessage(e.target.value)}
+                                        className="flex-1 p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 text-gray-900 bg-white shadow-inner"
+                                        placeholder="Type your message..."
+                                    />
+                                    <button
+                                        type="submit"
+                                        className="ml-2 bg-gradient-to-r from-blue-600 to-blue-800 p-3 rounded-lg text-white hover:from-blue-700 hover:to-blue-900 transition-all duration-300 shadow-lg"
+                                    >
+                                        <i className="fas fa-paper-plane"></i>
+                                    </button>
                                 </div>
-                            </div>
-                            <div className="flex items-center">
-                                <input type="text" className="w-full p-2 rounded-lg chat-input" placeholder="Type your message..." />
-                                <button className="ml-2 bg-blue-500 p-2 rounded-lg text-white">
-                                    <i className="fas fa-paper-plane"></i>
-                                </button>
-                            </div>
+                            </form>
                         </div>
                     )}
                 </>

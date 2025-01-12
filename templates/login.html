@@ -56,14 +56,14 @@
     <main class="flex justify-center items-center min-h-screen">
         <div class="bg-white text-gray-800 rounded-lg shadow-lg p-8 w-full max-w-md">
             <h2 class="text-2xl font-bold mb-4 text-center">User Login</h2>
-            <form id="loginForm" onsubmit="return validateLoginForm()">
+            <form id="loginForm" action="/login" method="POST" onsubmit="return validateLoginForm()">
                 <div class="mb-4">
                     <label class="block text-sm font-medium" for="loginIdentifier">Phone Number or Aadhar Number</label>
-                    <input class="mt-1 block w-full border border-gray-400 rounded-md shadow-sm" id="loginIdentifier" type="text" placeholder="Enter Phone Number or Aadhar Number" required oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                    <input class="mt-1 block w-full border border-gray-400 rounded-md shadow-sm" id="loginIdentifier" name="loginIdentifier" type="text" placeholder="Enter Phone Number or Aadhar Number" required oninput="this.value = this.value.replace(/[^0-9]/g, '')">
                 </div>
                 <div class="mb-4">
                     <label class="block text-sm font-medium" for="loginPassword">Password</label>
-                    <input class="mt-1 block w-full border border-gray-400 rounded-md shadow-sm" id="loginPassword" type="password" placeholder="Enter Password" required>
+                    <input class="mt-1 block w-full border border-gray-400 rounded-md shadow-sm" id="loginPassword" name="loginPassword" type="password" placeholder="Enter Password" required>
                 </div>
                 <div class="flex justify-between">
                     <button class="bg-green-500 text-white px-4 py-2 rounded-md" type="submit">Login</button>

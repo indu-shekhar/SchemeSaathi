@@ -22,11 +22,11 @@ def after_request(response):
     response.headers["Pragma"] = "no-cache"
     return response
 
-# # Configure CS50 Library to use SQLite database
-# db = SQL("sqlite:///app.db")
+# Configure CS50 Library to use SQLite database
+db = SQL("sqlite:///app.db")
 
 @app.route('/')
-# @login_required
+@login_required
 def home():
     schemes = [
         {
@@ -67,27 +67,33 @@ def login():
     # User reached route via POST (as by submitting a form via POST)
     if request.method == "POST":
         # Ensure username was submitted
-        if not request.form.get("username"):
-            return apology("must provide username", 400)
+        if not request.form.get("loginIdentifier"):
+            return apology("must provide phone number or aadhar number", 400)
 
         # Ensure password was submitted
-        elif not request.form.get("password"):
+        elif not request.form.get("loginPassword"):
             return apology("must provide password", 400)
 
-        # Query database for username
-        rows = db.execute(
-            "SELECT * FROM users WHERE username = ?", request.form.get(
-                "username")
-        )
+        login_identifier = request.form.get("loginIdentifier")
+        password = request.form.get("loginPassword")
+
+        # Determine if login identifier is Aadhar number or phone number
+        if len(login_identifier) == 12 and login_identifier.isdigit():
+            # Query database for Aadhar number
+            rows = db.execute("SELECT * FROM user_primary_data JOIN user_secondary_data ON user_primary_data.user_id = user_secondary_data.user_id WHERE user_secondary_data.aadhar = ?", login_identifier)
+        elif len(login_identifier) == 10 and login_identifier.isdigit():
+            # Query database for phone number
+            rows = db.execute("SELECT * FROM user_primary_data WHERE phone_number = ?", login_identifier)
+        else:
+            return apology("invalid phone number or aadhar number format", 400)
 
         # Ensure username exists and password is correct
-        if len(rows) != 1 or not check_password_hash(
-            rows[0]["hash"], request.form.get("password")
-        ):
-            return apology("invalid username and/or password", 400)
+        if len(rows) != 1 or not check_password_hash(rows[0]["password"], password):
+            return apology("invalid phone number/aadhar number and/or password", 400)
 
         # Remember which user has logged in
-        session["user_id"] = rows[0]["id"]
+        session["user_id"] = rows[0]["user_id"]
+        print("login sucessfull")
 
         # Redirect user to home page
         return redirect("/")
@@ -95,6 +101,8 @@ def login():
     # User reached route via GET (as by clicking a link or via redirect)
     else:
         return render_template("login.html")
+    
+    
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -139,32 +147,50 @@ def register():
         # Hash password
         hash = generate_password_hash(password)
 
-        # Insert user into database
-        print("First Name:", first_name)
-        print("Middle Name:", middle_name)
-        print("Last Name:", last_name)
-        print("Age:", age)
-        print("DOB:", dob)
-        print("Gender:", gender)
-        print("Marital Status:", marital_status)
-        print("Phone Number:", phone_number)
-        print("Village/City:", village_city)
-        print("District:", district)
-        print("State:", state)
-        print("Country:", country)
-        print("Pincode:", pincode)
-        print("Partner Name:", partner_name)
-        print("Parent Names:", parent_names)
-        print("Children Details:", children_details)
-        print("Aadhar Number:", aadhar_number)
-        print("Aadhar Copy Filename:", aadhar_copy_filename)
-        print("Password Hash:", hash)
+        # Combine first, middle, and last names
+        full_name = f"{first_name} {middle_name} {last_name}".strip()
+
+        try:
+            # Begin a transaction
+            db.execute("BEGIN TRANSACTION")
+
+            # Insert user into user_primary_data table
+            user_id = db.execute("INSERT INTO user_primary_data (password, name, dob, sex, phone_number, caste) VALUES (?, ?, ?, ?, ?, ?)",
+                     hash, full_name, dob, gender, phone_number, "N/A")
+
+            # Insert user into user_secondary_data table
+            db.execute("INSERT INTO user_secondary_data (user_id, address, email, aadhar, PAN, disability, ration_card, marital_status, spouse_details, child_details) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                   user_id, f"{village_city}, {district}, {state}, {country}, {pincode}", "N/A", aadhar_number, "N/A", "N/A", "N/A", marital_status, partner_name, children_details)
+
+            # Commit the transaction
+            db.execute("COMMIT")
+
+        except Exception as e:
+            # Rollback the transaction in case of error
+            db.execute("ROLLBACK")
+            return apology(f"An error occurred: {e}", 500)
 
         # Redirect to login page
         return redirect("/login")
 
     else:
         return render_template("registration.html")
+
+# Add this new route to handle chat messages
+
+@app.route("/chat", methods=["POST"])
+@login_required
+def chat():
+    """Handle chat messages"""
+    message = request.json.get("message")
+    if not message:
+        return {"error": "Message is required"}, 400
+    
+    # For now, just echo back the message
+    # Later we can implement actual chatbot logic here
+    response = f"You said: {message}"
+    
+    return {"response": response}
 
 if __name__ == '__main__':
     app.run(debug=True)
