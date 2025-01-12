@@ -100,14 +100,17 @@ def For_Recommedation_Suggestion(Details , Documents):
   query = Details
   from_user = Documents
   results = search(query)
+  send_from_server = [[],[]]
   # print(results)
-  # for idx in results:
-  #     list_ = check_elements([li.strip() for li in from_user.split(',')] ,[li.strip() for li in data['documents_required'][idx].split(',')])
-  #     if list_ == []:
-  #       print(f"Recommended:{data['ID'][idx]}, Scheme Name: {data['scheme_name'][idx]}")
-  #     else:
-  #       print(f"sugested : ID: {data['ID'][idx]}, Scheme Name: {data['scheme_name'][idx]} , Missing Document : {list_}")
-  return results
+  for idx in results:
+      list_ = check_elements([li.strip() for li in from_user.split(',')] ,[li.strip() for li in data['documents_required'][idx].split(',')])
+      if list_ == []:
+        print(f"Recommended:{data['ID'][idx]}, Scheme Name: {data['scheme_name'][idx]}")
+        send_from_server[0].append(idx)
+      else:
+        print(f"sugested : ID: {data['ID'][idx]}, Scheme Name: {data['scheme_name'][idx]} , Missing Document : {list_}")
+        send_from_server[1].append({idx:list_})
+  return send_from_server
 
 query = "Student from Punjab"
 from_user = "Aadhaar card,PAN card,Birth certificate or age certificate,Community certificate,Caste certificate (SC/ST/OBC/EWS),Disability certificate or proof,Income certificate , Ration card"

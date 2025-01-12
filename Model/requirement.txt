@@ -1,7 +1,5 @@
-!pip install chromadb -q
-!pip install sentence-transformers -q
-!pip install pytesseract opencv-python
-!sudo apt update
-!sudo apt install -y tesseract-ocr
-!pip install pytesseract
-!pip install googletrans==4.0.0-rc1
+chromadb
+sentence-transformers
+opencv-python
+pytesseract
+googletrans==4.0.0-rc1

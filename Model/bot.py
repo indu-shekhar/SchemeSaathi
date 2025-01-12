@@ -8,7 +8,7 @@ from documents_key import document_keywords
 genai.configure(api_key="AIzaSyCfbu9boxtqPch9pR8GHukty8z2bPSXopU")
 
 # Load the CSV data
-data = pd.read_csv("C:\EY_\query_classification_with_additional_queries.csv" , encoding='latin-1')
+data = pd.read_csv("/workspaces/SchemeSaathi/Model/query_classification_with_additional_queries.csv" , encoding='latin-1')
 
 scheme_names = data['scheme_name'].unique().tolist()
 
@@ -114,5 +114,4 @@ def Main_for_query(question):
         response = chat_session.send_message(prompt)
         return response.text
 
-Question = "Documents required for MGNREGA" 
-Main_for_query(Question)
+result = Main_for_query(Question)
