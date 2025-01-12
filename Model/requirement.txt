@@ -1,7 +1,7 @@
 # Core ML and Data Processing
 pandas==2.1.4
 numpy==1.26.3
-sentence-transformers==2.2.2
+sentence-transformers==3.3.1
 scikit-learn==1.4.0
 
 # Database and Vector Storage
@@ -42,3 +42,24 @@ transformers
 # sudo apt-get install -y tesseract-ocr-eng
 # sudo apt-get install -y tesseract-ocr-hin
 # sudo apt-get install -y libgl1-mesa-glx
+
+
+
+
+##libraries that i needed to change for it to work : 
+# Update mismatched versions
+pip install chroma-hnswlib==0.7.6
+pip install chromadb==0.6.2
+pip install easyocr==1.7.2
+pip install google-ai-generativelanguage==0.6.10
+pip install google-generativeai==0.8.3
+pip install grpcio-status==1.69.0
+pip install h11==0.14.0
+pip install httpcore==1.0.7
+pip install httpx==0.28.1
+pip install numpy==1.26.4
+
+# Install missing packages
+pip install google-api-python-client==2.158.0
+pip install google-auth-httplib2==0.2.0
+pip install httplib2==0.22.0

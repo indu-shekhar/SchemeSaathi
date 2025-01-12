@@ -5,6 +5,8 @@ from flask_session import Session
 from werkzeug.security import check_password_hash, generate_password_hash
 from helper import apology, login_required
 from werkzeug.utils import secure_filename
+from OCR import main_for_ocr
+from bot import Main_for_query
 
 app = Flask(__name__)
 
@@ -188,9 +190,11 @@ def chat():
     
     # For now, just echo back the message
     # Later we can implement actual chatbot logic here
-    response = f"You said: {message}"
+    response = Main_for_query(message)
     
     return {"response": response}
+
+
 
 @app.route("/logout")
 def logout():
