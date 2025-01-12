@@ -1,3 +1,7 @@
+import sys
+import pysqlite3
+sys.modules['sqlite3'] = pysqlite3
+
 import chromadb
 from chromadb.config import Settings
 import pandas as pd
@@ -5,9 +9,11 @@ from sentence_transformers import SentenceTransformer
 import numpy as np
 import pickle
 
+
+
 # Initialize client with persistence
 persist_directory = "/workspaces/SchemeSaathi/Model/chroma.sqlite3"  # Directory to store persistent data
-client = chromadb.Client(Settings(persist_directory=persist_directory))
+client = chromadb.Client(Settings(persist_directory = persist_directory))
 
 
 collection_name = "scheme_data_collection"

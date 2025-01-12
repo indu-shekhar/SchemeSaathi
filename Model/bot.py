@@ -113,5 +113,3 @@ def Main_for_query(question):
         prompt = f"""Question: {question}Give answer based on you knowldege for the question and generate the a response like chatbot."""
         response = chat_session.send_message(prompt)
         return response.text
-
-result = Main_for_query(Question)
