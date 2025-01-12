@@ -95,7 +95,7 @@ def Main_for_query(question):
     if scheme is not None:
         print(scheme)
         filtered_data = data[data['scheme_name'] == scheme]
-        filtered_data = filtered_data['eligibility_criteria'].iloc[0] + "\n" + filtered_data['documents_required'].iloc[0] + filtered_data['brief_description'].iloc[0]+ 'application_process : '+filtered_data['application_process'].iloc[0]
+        filtered_data = filtered_data['eligibility_criteria'].iloc[0] + "\n" + filtered_data['documents_required'].iloc[0] + filtered_data['detailed_description'].iloc[0]+ 'application_process : '+filtered_data['application_process'].iloc[0]
         prompt = f"""
         "You are a highly concise and precise assistant. Provide a direct answer to the question after taking few lines from question based strictly on the "
         "available context. Avoid filler phrases like 'Based on the provided context.
@@ -110,9 +110,6 @@ def Main_for_query(question):
     else:
         # results = rag_query(question)
         # print(f'Bot: {results}')
-        prompt = f"""
-        "You are a highly knowledgeable assistant. Provide a direct and accurate answer to the question based on the information you possess. Avoid phrases like 'I do not know' and provide plain information about the subject.
-        Question: {question}
-        """
+        prompt = f"""Question: {question}Give answer based on you knowldege for the question and generate the a response like chatbot."""
         response = chat_session.send_message(prompt)
         return response.text
