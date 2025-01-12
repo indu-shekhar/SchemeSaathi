@@ -192,5 +192,23 @@ def chat():
     
     return {"response": response}
 
+@app.route("/logout")
+def logout():
+    """Log user out"""
+    # Clear the session
+    session.clear()
+    # Redirect to login page
+    return redirect("/login")
+
+
+
+
+
+
+
+
+
+
 if __name__ == '__main__':
     app.run(debug=True)
+    

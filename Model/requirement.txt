@@ -1,9 +1,44 @@
-chromadb
-sentence-transformers
-opencv-python
-pytesseract
-googletrans==4.0.0-rc1
-sudo apt update
-sudo apt install -y libgl1-mesa-glx libglib2.0-0 libsm6
-sudo apt install -y mesa-utils
-easyocr
+# Core ML and Data Processing
+pandas==2.1.4
+numpy==1.26.3
+sentence-transformers==2.2.2
+scikit-learn==1.4.0
+
+# Database and Vector Storage
+chromadb==0.4.22
+SQLAlchemy==2.0.25
+
+# Image Processing and OCR
+opencv-python==4.9.0.80
+pytesseract==0.3.10
+easyocr==1.7.1
+Pillow==10.2.0
+
+# Translation
+googletrans==3.1.0a0
+
+# Google AI
+google-generativeai==0.3.2
+google-cloud-aiplatform==1.42.0
+
+# Web Framework
+Flask==3.0.1
+cs50==9.3.0
+flask-session==0.5.0
+Werkzeug==3.0.1
+
+# Utilities
+python-dotenv==1.0.0
+requests==2.31.0
+
+# Deep Learning Dependencies
+torch
+torchvision
+transformers
+
+# System Dependencies (need to be installed via apt)
+# sudo apt-get update
+# sudo apt-get install -y tesseract-ocr
+# sudo apt-get install -y tesseract-ocr-eng
+# sudo apt-get install -y tesseract-ocr-hin
+# sudo apt-get install -y libgl1-mesa-glx
