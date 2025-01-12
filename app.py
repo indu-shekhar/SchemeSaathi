@@ -30,34 +30,45 @@ db = SQL("sqlite:///app.db")
 @app.route('/')
 @login_required
 def home():
-    schemes = [
-        {
-            "name": "Pradhan Mantri Jan Dhan Yojana",
-            "link": "https://pmjdy.gov.in/",
-            "tags": ["financial", "inclusion"]
-        },
-        {
-            "name": "Ayushman Bharat",
-            "link": "https://www.pmjay.gov.in/",
-            "tags": ["medical", "healthcare"]
-        },
-        {
-            "name": "Pradhan Mantri Awas Yojana",
-            "link": "https://pmaymis.gov.in/",
-            "tags": ["housing", "urban development"]
-        },
-        {
-            "name": "National Scholarship Portal",
-            "link": "https://scholarships.gov.in/",
-            "tags": ["education", "scholarship"]
-        },
-        {
-            "name": "Atal Pension Yojana",
-            "link": "https://npscra.nsdl.co.in/scheme-details/APY.php",
-            "tags": ["financial", "pension"]
-        }
-    ]
-    return render_template('index.html', schemes=schemes)
+    # Get suggested schemes
+    suggested_raw = db.execute("""
+        SELECT s.scheme_name, s.Official_Website as link, s.tags, ss.missing_documents 
+        FROM scheme_suggested ss
+        JOIN schemes s ON ss.scheme_id = s.id
+        WHERE ss.user_id = ?
+    """, session["user_id"])
+
+    # Get available schemes
+    available_raw = db.execute("""
+        SELECT s.scheme_name, s.Official_Website as link, s.tags
+        FROM scheme_available sa
+        JOIN schemes s ON sa.scheme_id = s.id
+        WHERE sa.user_id = ?
+    """, session["user_id"])
+
+    # Format suggested schemes
+    suggested_schemes = []
+    for scheme in suggested_raw:
+        suggested_schemes.append({
+            "name": scheme["scheme_name"],
+            "link": scheme["link"] if scheme["link"] else "#",
+            "tags": scheme["tags"].split(",") if scheme["tags"] else [],
+            "missing_documents": scheme["missing_documents"]
+        })
+
+    # Format available schemes  
+    available_schemes = []
+    for scheme in available_raw:
+        available_schemes.append({
+            "name": scheme["scheme_name"], 
+            "link": scheme["link"] if scheme["link"] else "#",
+            "tags": scheme["tags"].split(",") if scheme["tags"] else []
+        })
+
+    return render_template('index.html', 
+                         suggested_schemes=suggested_schemes,
+                         available_schemes=available_schemes)
+
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -195,6 +206,55 @@ def chat():
     return {"response": response}
 
 
+@app.route('/upload_document', methods=['GET', 'POST'])
+@login_required
+def upload_document():
+    if request.method == 'POST':
+        if 'file' not in request.files:
+            return {"error": "No file part"}, 400
+
+        file = request.files['file']
+        if file.filename == '':
+            return {"error": "No selected file"}, 400
+
+        if file:
+            filename = secure_filename(file.filename)
+            file_path = os.path.join("uploads", filename)
+            file.save(file_path)
+
+            # Process the document using OCR
+            document_name = main_for_ocr(file_path)
+
+            return {"documentName": document_name}, 200
+
+        return {"error": "File upload failed"}, 500
+
+    else:
+        return render_template("upload_form.html")
+
+
+@app.route('/verify_document', methods=['POST'])
+@login_required
+def verify_document():
+    data = request.get_json()
+    document_name = data.get("documentName")
+
+    if not document_name:
+        return {"error": "Document name is required"}, 400
+
+    # Check if the document already exists in the document table
+    document = db.execute("SELECT id FROM document WHERE document_name = ?", document_name)
+    if not document:
+        # Insert the document into the document table
+        document_id = db.execute("INSERT INTO document (document_name) VALUES (?)", document_name)
+    else:
+        document_id = document[0]["id"]
+
+    # Insert the document-user relationship into the user_doc table
+    db.execute("INSERT INTO user_doc (user_id, document_id) VALUES (?, ?)", session["user_id"], document_id)
+
+    return {"message": "Document verified and stored successfully"}, 200
+
 
 @app.route("/logout")
 def logout():
@@ -204,8 +264,5 @@ def logout():
     # Redirect to login page
     return redirect("/login")
 
-
-
 if __name__ == '__main__':
     app.run(debug=True)
-    

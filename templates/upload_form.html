@@ -1,0 +1,324 @@
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>
+   Document Upload
+  </title>
+  <script crossorigin="" src="https://unpkg.com/react@18/umd/react.development.js">
+  </script>
+  <script crossorigin="" src="https://unpkg.com/react-dom@18/umd/react-dom.development.js">
+  </script>
+  <script src="https://unpkg.com/@babel/standalone/babel.js">
+  </script>
+  <script src="https://cdn.tailwindcss.com">
+  </script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&amp;display=swap" rel="stylesheet"/>
+  <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit">
+  </script>
+  <style>
+   body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(to right, #2c3e50, #4ca1af);
+        }
+        .glass {
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .hidden {
+            display: none;
+        }
+        .goog-te-banner-frame.skiptranslate { display: none !important; }
+        body { top: 0px !important; }
+        .goog-te-gadget-simple {
+            background-color: #f9f9f9;
+            border: 1px solid #ccc;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-family: 'Roboto', sans-serif;
+            display: inline-flex;
+            align-items: center;
+        }
+        .goog-te-gadget-icon {
+            background-image: url('https://translate.googleapis.com/translate_static/img/te_ctrl3.gif');
+            background-position: -65px 0px;
+            width: 16px;
+            height: 16px;
+            margin-right: 8px;
+        }
+        .goog-te-gadget-simple a {
+            color: #333;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        .goog-te-gadget-simple a:hover {
+            text-decoration: underline;
+        }
+        .goog-te-gadget-simple .VIpgJd-ZVi9od-xl07Ob-lTBxed {
+            display: flex;
+            align-items: center;
+        }
+        .goog-te-gadget-simple .VIpgJd-ZVi9od-xl07Ob-lTBxed span {
+            margin-right: 5px;
+        }
+  </style>
+ </head>
+ <body class="text-white">
+  <!-- Navbar -->
+  <header class="p-4 glass text-center flex justify-between items-center">
+   <button id="menuButton">
+    <i class="fas fa-bars text-2xl">
+    </i>
+   </button>
+   <h1 class="text-2xl font-bold">
+    Government Schemes Information
+   </h1>
+   <div class="flex items-center space-x-4">
+    <div id="google_translate_element">
+    </div>
+    <button id="languageToggle">
+     <i class="fas fa-globe text-2xl">
+     </i>
+    </button>
+   </div>
+  </header>
+  <!-- Side Panel -->
+  <div class="fixed inset-0 bg-black bg-opacity-75 z-50 hidden" id="sidePanel">
+   <div class="w-64 p-4 glass flex flex-col items-center h-full">
+    <div class="w-full flex justify-end">
+     <button id="closeMenuButton">
+      <i class="fas fa-times text-2xl text-white">
+      </i>
+     </button>
+    </div>
+    <div class="mb-6">
+     <img alt="Profile picture of the user" class="rounded-full mb-2" src="https://placehold.co/100x100"/>
+     <h2 class="text-lg font-bold">
+      Abhishek Kumar
+     </h2>
+     <p class="text-sm">
+      superananya@gmail.com
+     </p>
+    </div>
+    <nav class="flex-1 w-full overflow-auto">
+     <ul class="space-y-4">
+      <li class="flex items-center space-x-2">
+       <i class="fas fa-home">
+       </i>
+       <a class="hover:underline" href="#">
+        Home
+       </a>
+      </li>
+      <li class="flex items-center space-x-2">
+       <i class="fas fa-tachometer-alt">
+       </i>
+       <a class="hover:underline" href="#">
+        Dashboard
+       </a>
+      </li>
+      <li class="flex items-center space-x-2">
+       <i class="fas fa-upload">
+       </i>
+       <a class="hover:underline" href="#">
+        Upload Documents
+       </a>
+      </li>
+      <li class="flex items-center space-x-2">
+       <i class="fas fa-sync-alt">
+       </i>
+       <a class="hover:underline" href="#">
+        Refresh
+       </a>
+      </li>
+      <li class="flex items-center space-x-2">
+       <i class="fas fa-file-alt">
+       </i>
+       <a class="hover:underline" href="#">
+        Documents Uploaded
+       </a>
+      </li>
+      <li class="flex items-center space-x-2">
+       <i class="fas fa-sign-out-alt">
+       </i>
+       <a class="hover:underline" href="/logout">
+        Logout
+       </a>
+      </li>
+     </ul>
+    </nav>
+   </div>
+  </div>
+  <!-- Main Content -->
+  <div class="flex justify-center items-center min-h-screen">
+   <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md" style="background-image: url('https://www.transparenttextures.com/patterns/white-wall.png');">
+    <form action="/upload_document" class="space-y-4" enctype="multipart/form-data" id="uploadForm" method="POST">
+     <div>
+      <label class="block text-sm font-medium text-gray-700" for="file">
+       Upload Image or PDF
+      </label>
+      <input accept="image/*,application/pdf" class="mt-1 block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" id="file" name="file" type="file"/>
+     </div>
+     <button class="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" type="submit">
+      Submit
+     </button>
+    </form>
+    <div class="hidden text-center mt-4" id="loading">
+     <i class="fas fa-spinner fa-spin text-3xl text-blue-500">
+     </i>
+    </div>
+    <div class="hidden space-y-4 mt-4" id="verifySection">
+     <div>
+      <label class="block text-sm font-medium text-gray-700" for="documentName">
+       Document Name
+      </label>
+      <input class="mt-1 block w-full text-sm text-gray-900 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" id="documentName" name="documentName" type="text"/>
+     </div>
+     <button class="w-full bg-green-500 text-white py-2 rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500" id="verifyButton">
+      Verify
+     </button>
+    </div>
+   </div>
+  </div>
+  <!-- Footer -->
+  <footer class="bg-gray-900 text-white p-4 pt-20">
+   <div class="container mx-auto">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+     <div>
+      <h3 class="text-lg font-semibold mb-2">
+       Important Links
+      </h3>
+      <ul>
+       <li>
+        <a class="text-blue-400 hover:underline" href="https://www.india.gov.in/">
+         India.gov.in
+        </a>
+       </li>
+       <li>
+        <a class="text-blue-400 hover:underline" href="https://www.mygov.in/">
+         MyGov
+        </a>
+       </li>
+       <li>
+        <a class="text-blue-400 hover:underline" href="https://www.digitalindia.gov.in/">
+         Digital India
+        </a>
+       </li>
+      </ul>
+     </div>
+     <div>
+      <h3 class="text-lg font-semibold mb-2">
+       Government Services
+      </h3>
+      <ul>
+       <li>
+        <a class="text-blue-400 hover:underline" href="https://www.epfindia.gov.in/">
+         EPFO
+        </a>
+       </li>
+       <li>
+        <a class="text-blue-400 hover:underline" href="https://www.passportindia.gov.in/">
+         Passport Seva
+        </a>
+       </li>
+       <li>
+        <a class="text-blue-400 hover:underline" href="https://www.irctc.co.in/">
+         IRCTC
+        </a>
+       </li>
+      </ul>
+     </div>
+     <div>
+      <h3 class="text-lg font-semibold mb-2">
+       Contact Us
+      </h3>
+      <p>
+       Government of India
+      </p>
+      <p>
+       Email: contact@india.gov.in
+      </p>
+      <p>
+       Phone: +91-11-23012345
+      </p>
+     </div>
+    </div>
+    <div class="text-center mt-4">
+     <p>
+      © 2023 SchemSaathi. All rights reserved.
+     </p>
+     <a class="text-blue-400" href="https://mysaathiwebsite.com">
+      Visit MySaathi Website
+     </a>
+    </div>
+   </div>
+  </footer>
+  <script>
+   const uploadForm = document.getElementById('uploadForm');
+        const loading = document.getElementById('loading');
+        const verifySection = document.getElementById('verifySection');
+        const documentName = document.getElementById('documentName');
+        const verifyButton = document.getElementById('verifyButton');
+        const menuButton = document.getElementById('menuButton');
+        const sidePanel = document.getElementById('sidePanel');
+        const closeMenuButton = document.getElementById('closeMenuButton');
+
+        menuButton.addEventListener('click', () => {
+            sidePanel.classList.toggle('hidden');
+        });
+
+        closeMenuButton.addEventListener('click', () => {
+            sidePanel.classList.add('hidden');
+        });
+
+        uploadForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            loading.classList.remove('hidden');
+            const formData = new FormData(uploadForm);
+
+            fetch('/upload_document', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                loading.classList.add('hidden');
+                documentName.value = data.documentName;
+                verifySection.classList.remove('hidden');
+            })
+            .catch(error => {
+                loading.classList.add('hidden');
+                alert('Error uploading document');
+            });
+        });
+
+        verifyButton.addEventListener('click', function() {
+            const documentNameValue = documentName.value;
+            fetch('/verify_document', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ documentName: documentNameValue })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert('Document verified successfully');
+            })
+            .catch(error => {
+                alert('Error verifying document');
+            });
+        });
+
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'en',
+                includedLanguages: 'en,hi,te,kn,ta,ml,gu,mr,bn,pa,or,as,ur,sd,si,ne,sa,ks,mai,doi,brx,mlt',
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+            }, 'google_translate_element');
+        }
+  </script>
+ </body>
+</html>

@@ -1,0 +1,610 @@
+<html>
+<head>
+    <title>Government Schemes Information</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"></link>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.7.14/lottie.min.js"></script>
+    <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(to right, #2c3e50, #4ca1af);
+        }
+        .glass {
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .tag {
+            background: rgba(0, 128, 0, 0.7);
+        }
+        .chat-input {
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 25px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        .chat-input:focus {
+            border-color: #4ca1af;
+        }
+        /* Custom scrollbar styles */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(76, 161, 175, 0.8);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(76, 161, 175, 1);
+        }
+        .scrollbar-custom {
+            scrollbar-color: rgba(76, 161, 175, 0.8) rgba(255, 255, 255, 0.1);
+            scrollbar-width: thin;
+        }
+        .goog-te-banner-frame.skiptranslate { display: none !important; }
+        body { top: 0px !important; }
+        .goog-te-gadget-simple {
+            background-color: #f9f9f9;
+            border: 1px solid #ccc;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-family: 'Roboto', sans-serif;
+            display: inline-flex;
+            align-items: center;
+        }
+        .goog-te-gadget-icon {
+            background-image: url('https://translate.googleapis.com/translate_static/img/te_ctrl3.gif');
+            background-position: -65px 0px;
+            width: 16px;
+            height: 16px;
+            margin-right: 8px;
+        }
+        .goog-te-gadget-simple a {
+            color: #333;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        .goog-te-gadget-simple a:hover {
+            text-decoration: underline;
+        }
+        .goog-te-gadget-simple .VIpgJd-ZVi9od-xl07Ob-lTBxed {
+            display: flex;
+            align-items: center;
+        }
+        .goog-te-gadget-simple .VIpgJd-ZVi9od-xl07Ob-lTBxed span {
+            margin-right: 5px;
+        }
+        .chat-container {
+            background: rgba(44, 62, 80, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .chat-header {
+            background: linear-gradient(to right, #2c3e50, #3498db);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .chat-messages {
+            background: rgba(25, 35, 45, 0.95);
+        }
+
+        .chat-input-container {
+            background: rgba(44, 62, 80, 0.95);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .upload-form {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.75);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+        }
+        .upload-form.active {
+            display: flex;
+        }
+        .upload-form-container {
+            background: linear-gradient(to right, #2c3e50, #3498db);
+            padding: 30px;
+            border-radius: 15px;
+            width: 400px;
+            text-align: center;
+            color: white;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .waiting-animation {
+            display: none;
+            background: rgba(44, 62, 80, 0.95);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .waiting-animation.active {
+            display: block;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .close-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: transparent;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: rgba(255, 255, 255, 0.8) !important;
+        }
+        .upload-form input[type="file"] {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px;
+            border-radius: 8px;
+            margin: 15px 0;
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .upload-form button {
+            background: #4ca1af;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 10px 0;
+            transition: background 0.3s;
+        }
+        .upload-form button:hover {
+            background: #45b1c6;
+        }
+        .upload-form input[type="text"] {
+            background: rgba(255, 255, 255, 0.9);
+            color: #2c3e50;
+            padding: 8px 15px;
+            border-radius: 8px;
+            border: none;
+            width: 80%;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body class="text-white">
+    <div id="root"></div>
+    <div id="upload-form" class="upload-form">
+        <div class="upload-form-container">
+            <button class="close-button" id="close-upload-form">&times;</button>
+            <h2>Upload Document</h2>
+            <form id="document-upload-form">
+                <input type="file" id="document-file" name="document-file" accept="image/*" required />
+                <button type="submit">Submit</button>
+            </form>
+            <div id="waiting-animation" class="waiting-animation">
+                <div id="lottie-container" style="width: 200px; height: 200px; margin: 0 auto;"></div>
+                <p class="text-white mt-4">Processing your document...</p>
+            </div>
+            <div id="verification-section" style="display: none;">
+                <label for="verification-text">Verify the document name:</label>
+                <input type="text" id="verification-text" name="verification-text" required />
+                <button id="verify-button">Verify</button>
+            </div>
+        </div>
+    </div>
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        function App() {
+            const [isMenuOpen, setIsMenuOpen] = useState(false);
+            const [isChatOpen, setIsChatOpen] = useState(false);
+            const [language, setLanguage] = useState('en');
+            const [isUploadFormOpen, setIsUploadFormOpen] = useState(false);
+
+            const toggleLanguage = () => {
+                setLanguage(prev => (prev === 'en' ? 'hi' : 'en'));
+            };
+
+            const toggleUploadForm = () => {
+                setIsUploadFormOpen(prev => !prev);
+            };
+
+            useEffect(() => {
+                const uploadForm = document.getElementById('upload-form');
+                if (isUploadFormOpen) {
+                    uploadForm.classList.add('active');
+                } else {
+                    uploadForm.classList.remove('active');
+                }
+            }, [isUploadFormOpen]);
+
+            useEffect(() => {
+                const closeUploadFormButton = document.getElementById('close-upload-form');
+                closeUploadFormButton.addEventListener('click', () => setIsUploadFormOpen(false));
+            }, []);
+
+            return (
+                <div className="flex flex-col h-screen relative">
+                    <Header setIsMenuOpen={setIsMenuOpen} toggleLanguage={toggleLanguage} />
+                    <SidePanel isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} toggleUploadForm={toggleUploadForm} />
+                    <MainContent language={language} />
+                    <Footer />
+                    <ChatBot isChatOpen={isChatOpen} setIsChatOpen={setIsChatOpen} />
+                </div>
+            );
+        }
+
+        function SidePanel({ isMenuOpen, setIsMenuOpen, toggleUploadForm }) {
+            return (
+                <div className={`fixed inset-0 bg-black bg-opacity-75 z-50 ${isMenuOpen ? 'block' : 'hidden'}`}>
+                    <div className="w-64 p-4 glass flex flex-col items-center h-full">
+                        <div className="w-full flex justify-end">
+                            <button onClick={() => setIsMenuOpen(false)}>
+                                <i className="fas fa-times text-2xl text-white"></i>
+                            </button>
+                        </div>
+                        <div className="mb-6">
+                            <img src="https://placehold.co/100x100" alt="Profile picture of the user" className="rounded-full mb-2" />
+                            <h2 className="text-lg font-bold">Abhishek Kumar</h2>
+                            <p className="text-sm">superananya@gmail.com</p>
+                        </div>
+                        <nav className="flex-1 w-full overflow-auto">
+                            <ul className="space-y-4">
+                                <li className="flex items-center space-x-2">
+                                    <i className="fas fa-home"></i>
+                                    <a href="#" className="hover:underline">Home</a>
+                                </li>
+                                <li className="flex items-center space-x-2">
+                                    <i className="fas fa-tachometer-alt"></i>
+                                    <a href="#" className="hover:underline">Dashboard</a>
+                                </li>
+                                <li className="flex items-center space-x-2">
+                                    <i className="fas fa-upload"></i>
+                                    <button onClick={toggleUploadForm} className="hover:underline">Upload Documents</button>
+                                </li>
+                                <li className="flex items-center space-x-2">
+                                    <i className="fas fa-sync-alt"></i>
+                                    <a href="#" className="hover:underline">Refresh</a>
+                                </li>
+                                <li className="flex items-center space-x-2">
+                                    <i className="fas fa-file-alt"></i>
+                                    <a href="#" className="hover:underline">Documents Uploaded</a>
+                                </li>
+                                <li className="flex items-center space-x-2">
+                                    <i className="fas fa-sign-out-alt"></i>
+                                    <a href="/logout" className="hover:underline">Logout</a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            );
+        }
+
+        function Header({ setIsMenuOpen, toggleLanguage }) {
+            return (
+                <header className="p-4 glass text-center flex justify-between items-center">
+                    <button onClick={() => setIsMenuOpen(prev => !prev)}>
+                        <i className="fas fa-bars text-2xl"></i>
+                    </button>
+                    <h1 className="text-2xl font-bold">Government Schemes Information</h1>
+                    <div className="flex items-center space-x-4">
+                        <div id="google_translate_element"></div>
+                        <button onClick={toggleLanguage}>
+                            <i className="fas fa-globe text-2xl"></i>
+                        </button>
+                    </div>
+                </header>
+            );
+        }
+
+        function MainContent({ language }) {
+            const schemes = [
+            {% for scheme in schemes %}
+                { title: '{{ scheme.name }}', tags: [{% for tag in scheme.tags %}'{{ tag }}'{% if not loop.last %}, {% endif %}{% endfor %}], link: '{{ scheme.link }}' }{% if not loop.last %}, {% endif %}
+            {% endfor %}
+            ];
+
+            const suggestedSchemes = [
+                { title: 'Beti Bachao Beti Padhao (BBBP)', tags: ['#women', '#education'], link: 'https://example.com/bbbp' },
+                { title: 'Ayushman Bharat Yojana (ABY)', tags: ['#health', '#insurance'], link: 'https://example.com/aby' },
+                { title: 'Digital India', tags: ['#technology', '#digital'], link: 'https://example.com/digitalindia' },
+                { title: 'Make in India', tags: ['#manufacturing', '#economy'], link: 'https://example.com/makeinindia' },
+                { title: 'Startup India', tags: ['#entrepreneurship', '#innovation'], link: 'https://example.com/startupindia' },
+                { title: 'Stand Up India', tags: ['#entrepreneurship', '#women'], link: 'https://example.com/standupindia' }
+            ];
+
+            return (
+                <main className="flex-1 p-4">
+                    <div className="mb-8">
+                        <h2 className="text-xl font-bold mb-4">{language === 'en' ? 'Available Schemes' : 'उपलब्ध योजनाएं'}</h2>
+                        <div className="flex space-x-4 overflow-x-auto scrollbar-custom">
+                            {schemes.map((scheme, index) => (
+                                <SchemeCard key={index} title={scheme.title} tags={scheme.tags} link={scheme.link} />
+                            ))}
+                        </div>
+                    </div>
+                    <div>
+                        <h2 className="text-xl font-bold mb-4">{language === 'en' ? 'Suggested Schemes' : 'सुझाई गई योजनाएं'}</h2>
+                        <div className="flex space-x-4 overflow-x-auto scrollbar-custom">
+                            {suggestedSchemes.map((scheme, index) => (
+                                <SchemeCard key={index} title={scheme.title} tags={scheme.tags} link={scheme.link} />
+                            ))}
+                        </div>
+                    </div>
+                </main>
+            );
+        }
+
+        function SchemeCard({ title, tags, link }) {
+            return (
+            <div className="glass p-4 rounded-lg min-w-[300px] cursor-pointer" onClick={() => window.location.href = link}>
+                <img src="https://placehold.co/300x200" alt={`Image representing ${title}`} className="rounded-lg mb-4" />
+                <h3 className="text-lg font-bold mb-2">{title}</h3>
+                <div className="space-x-2">
+                {tags.map((tag, index) => (
+                    <span key={index} className="tag text-white px-2 py-1 rounded-full text-xs">{tag}</span>
+                ))}
+                </div>
+            </div>
+            );
+        }
+
+        function Footer() {
+            return (
+                <footer class="bg-gray-900 text-white p-4 pt-20">
+                    <div class="container mx-auto">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div>
+                                <h3 class="text-lg font-semibold mb-2">Important Links</h3>
+                                <ul>
+                                    <li><a href="https://www.india.gov.in/" class="text-blue-400 hover:underline">India.gov.in</a></li>
+                                    <li><a href="https://www.mygov.in/" class="text-blue-400 hover:underline">MyGov</a></li>
+                                    <li><a href="https://www.digitalindia.gov.in/" class="text-blue-400 hover:underline">Digital India</a></li>
+                                    <li><a href="https://www.uidai.gov.in/" class="text-blue-400 hover:underline">UIDAI</a></li>
+                                    <li><a href="https://www.incometaxindia.gov.in/" class="text-blue-400 hover:underline">Income Tax Department</a></li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-semibold mb-2">Government Services</h3>
+                                <ul>
+                                    <li><a href="https://www.epfindia.gov.in/" class="text-blue-400 hover:underline">EPFO</a></li>
+                                    <li><a href="https://www.nvsp.in/" class="text-blue-400 hover:underline">NVSP</a></li>
+                                    <li><a href="https://www.passportindia.gov.in/" class="text-blue-400 hover:underline">Passport Seva</a></li>
+                                    <li><a href="https://www.irctc.co.in/" class="text-blue-400 hover:underline">IRCTC</a></li>
+                                    <li><a href="https://www.indiapost.gov.in/" class="text-blue-400 hover:underline">India Post</a></li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-semibold mb-2">Contact Us</h3>
+                                <p>Government of India</p>
+                                <p>Email: contact@india.gov.in</p>
+                                <p>Phone: +91-11-23012345</p>
+                            </div>
+                        </div>
+                        <div class="text-center mt-4">
+                            <p>&copy; 2023 SchemSaathi. All rights reserved.</p>
+                            <a class="text-blue-400" href="https://mysaathiwebsite.com">Visit MySaathi Website</a>
+                        </div>
+                    </div>
+                </footer>
+            );
+        }
+
+        function ChatBot({ isChatOpen, setIsChatOpen }) {
+            const [messages, setMessages] = useState([
+                {
+                    sender: 'bot',
+                    text: 'Welcome to SchemSaathi! How can I help you today?'
+                }
+            ]);
+            const [inputMessage, setInputMessage] = useState('');
+            const messagesEndRef = React.useRef(null);
+
+            const scrollToBottom = () => {
+                messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+            };
+
+            React.useEffect(() => {
+                scrollToBottom();
+            }, [messages]);
+
+            const handleSubmit = async (e) => {
+                e.preventDefault();
+                if (!inputMessage.trim()) return;
+
+                // Add user message
+                const userMessage = {
+                    sender: 'user',
+                    text: inputMessage
+                };
+                setMessages(prev => [...prev, userMessage]);
+                setInputMessage('');
+
+                try {
+                    const response = await fetch('/chat', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ message: inputMessage }),
+                    });
+
+                    const data = await response.json();
+                    
+                    // Add bot response
+                    const botMessage = {
+                        sender: 'bot',
+                        text: data.response
+                    };
+                    setMessages(prev => [...prev, botMessage]);
+                } catch (error) {
+                    console.error('Error:', error);
+                    // Add error message
+                    const errorMessage = {
+                        sender: 'bot',
+                        text: 'Sorry, I encountered an error. Please try again.'
+                    };
+                    setMessages(prev => [...prev, errorMessage]);
+                }
+            };
+
+            return (
+                <>
+                    <div className="fixed bottom-4 right-4">
+                        <button 
+                            className="bg-blue-500 p-4 rounded-full shadow-lg hover:bg-blue-600 transition-colors"
+                            onClick={() => setIsChatOpen(!isChatOpen)}
+                        >
+                            <i className={`fas ${isChatOpen ? 'fa-times' : 'fa-comments'} text-white text-2xl`}></i>
+                        </button>
+                    </div>
+                    {isChatOpen && (
+                        <div className="fixed bottom-20 right-4 w-96 h-[32rem] rounded-lg shadow-2xl overflow-hidden flex flex-col chat-container transition-all duration-300 ease-in-out">
+                            <div className="chat-header text-white p-4 flex justify-between items-center">
+                                <div className="flex items-center">
+                                    <i className="fas fa-robot text-2xl mr-2"></i>
+                                    <h2 className="text-lg font-bold">SchemSaathi Assistant</h2>
+                                </div>
+                                <button onClick={() => setIsChatOpen(false)} className="hover:text-gray-300 transition-colors">
+                                    <i className="fas fa-times text-xl"></i>
+                                </button>
+                            </div>
+                            <div className="flex-1 overflow-y-auto p-4 chat-messages">
+                                {messages.map((message, index) => (
+                                    <div
+                                        key={index}
+                                        className={`flex items-start mb-4 ${
+                                            message.sender === 'user' ? 'justify-end' : 'justify-start'
+                                        }`}
+                                    >
+                                        {message.sender === 'bot' && (
+                                            <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white rounded-full p-2 mr-2 shadow-lg">
+                                                <i className="fas fa-robot"></i>
+                                            </div>
+                                        )}
+                                        <div
+                                            className={`max-w-[70%] rounded-lg p-3 shadow-lg ${
+                                                message.sender === 'user'
+                                                    ? 'bg-gradient-to-r from-blue-600 to-blue-800 text-white'
+                                                    : 'bg-white text-gray-800'
+                                            }`}
+                                        >
+                                            <p>{message.text}</p>
+                                        </div>
+                                        {message.sender === 'user' && (
+                                            <div className="bg-gradient-to-r from-green-600 to-green-800 text-white rounded-full p-2 ml-2 shadow-lg">
+                                                <i className="fas fa-user"></i>
+                                            </div>
+                                        )}
+                                    </div>
+                                ))}
+                                <div ref={messagesEndRef} />
+                            </div>
+                            <form onSubmit={handleSubmit} className="p-4 chat-input-container">
+                                <div className="flex items-center">
+                                    <input
+                                        type="text"
+                                        value={inputMessage}
+                                        onChange={(e) => setInputMessage(e.target.value)}
+                                        className="flex-1 p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 text-gray-900 bg-white shadow-inner"
+                                        placeholder="Type your message..."
+                                    />
+                                    <button
+                                        type="submit"
+                                        className="ml-2 bg-gradient-to-r from-blue-600 to-blue-800 p-3 rounded-lg text-white hover:from-blue-700 hover:to-blue-900 transition-all duration-300 shadow-lg"
+                                    >
+                                        <i className="fas fa-paper-plane"></i>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    )}
+                </>
+            );
+        }
+
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'en',
+                includedLanguages: 'en,hi,te,kn,ta,ml,gu,mr,bn,pa,or,as,ur,sd,si,ne,sa,ks,mai,doi,brx,mlt',
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+            }, 'google_translate_element');
+        }
+
+        ReactDOM.render(<App />, document.getElementById('root'));
+
+        let animation = lottie.loadAnimation({
+            container: document.getElementById('lottie-container'),
+            renderer: 'svg',
+            loop: true,
+            autoplay: false,
+            path: 'https://assets2.lottiefiles.com/packages/lf20_prjwp0b2.json' // Upload animation JSON
+        });
+
+        document.getElementById('document-upload-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const waitingAnimation = document.getElementById('waiting-animation');
+            waitingAnimation.classList.add('active');
+            animation.play();
+
+            try {
+                const form = e.target;
+                const formData = new FormData(form);
+
+                const response = await fetch('/upload', {
+                    method: 'POST',
+                    body: formData,
+                });
+
+                const data = await response.json();
+                waitingAnimation.classList.remove('active');
+                document.getElementById('verification-section').style.display = 'block';
+                document.getElementById('verification-text').value = data.documentName;
+            } finally {
+                waitingAnimation.classList.remove('active');
+                animation.stop();
+            }
+        });
+
+        document.getElementById('verify-button').addEventListener('click', async () => {
+            const verificationText = document.getElementById('verification-text').value;
+
+            try {
+                const response = await fetch('/verify', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ documentName: verificationText }),
+                });
+
+                const data = await response.json();
+                alert(data.message);
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        });
+    </script>
+</body>
+</html>
