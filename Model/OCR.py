@@ -2,16 +2,13 @@ import cv2
 import pytesseract
 from googletrans import Translator
 import easyocr
-
+from documents_key import document_keywords
 
 def identify_document_type(text):
     """
     Identify document type based on extracted text.
     """
-    print(len(document_keywords))
-    
     try:
-        print(text.lower())
         for doc_type, keywords in document_keywords.items():
             for keyword in keywords:
                 if keyword.lower() in text.lower():
@@ -39,7 +36,6 @@ def easyocr_extract_text(image_path):
     text = ""
     for i in result:
       text += i[1] + " "
-
     text1 = translate_to_english(text)
     document_type = identify_document_type(text1.strip())
     return document_type
@@ -51,7 +47,6 @@ def preprocess_image(image_path):
     if image is None:
         raise ValueError(f"Image not found or unable to load: {image_path}")
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    
     return gray
 
 def create_image_pyramid(image, scales=[0.5, 1, 1.5, 2]):
@@ -93,5 +88,4 @@ def main_for_ocr(img_path):
     document_type = identify_document_type(extracted_text)
     if(document_type == "Unknown Document"):
         document_type = easyocr_extract_text(image_path)
-    print(f"Document Type: {document_type}")
     return document_type

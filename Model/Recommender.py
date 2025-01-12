@@ -1,7 +1,6 @@
 import chromadb
 from chromadb.config import Settings
 import pandas as pd
-import pandas as pd
 from sentence_transformers import SentenceTransformer
 import numpy as np
 import pickle
@@ -33,7 +32,7 @@ data_collection.add(
 )
 
 
-with open("/content/drive/MyDrive/Ey_Hackathon/scheme_embeddings.pkl", "rb") as f:
+with open("/workspaces/SchemeSaathi/Model/scheme_embeddings.pkl", "rb") as f:
     saved_data = pickle.load(f)
 
 scheme_embeddings = saved_data["embeddings"]
