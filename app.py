@@ -1,4 +1,5 @@
 import os
+import requests
 from cs50 import SQL
 from flask import Flask, redirect, render_template, request, session
 from flask_session import Session
@@ -31,43 +32,72 @@ db = SQL("sqlite:///app.db")
 @login_required
 def home():
     # Get suggested schemes
-    suggested_raw = db.execute("""
-        SELECT s.scheme_name, s.Official_Website as link, s.tags, ss.missing_documents 
-        FROM scheme_suggested ss
-        JOIN schemes s ON ss.scheme_id = s.id
-        WHERE ss.user_id = ?
-    """, session["user_id"])
+    # suggested_raw = db.execute("""
+    #     SELECT s.scheme_name, s.Official_Website as link, s.tags, ss.missing_documents 
+    #     FROM scheme_suggested ss
+    #     JOIN schemes s ON ss.scheme_id = s.id
+    #     WHERE ss.user_id = ?
+    # """, session["user_id"])
 
-    # Get available schemes
-    available_raw = db.execute("""
-        SELECT s.scheme_name, s.Official_Website as link, s.tags
-        FROM scheme_available sa
-        JOIN schemes s ON sa.scheme_id = s.id
-        WHERE sa.user_id = ?
-    """, session["user_id"])
+    # # Get available schemes
+    # available_raw = db.execute("""
+    #     SELECT s.scheme_name, s.Official_Website as link, s.tags
+    #     FROM scheme_available sa
+    #     JOIN schemes s ON sa.scheme_id = s.id
+    #     WHERE sa.user_id = ?
+    # """, session["user_id"])
 
-    # Format suggested schemes
-    suggested_schemes = []
-    for scheme in suggested_raw:
-        suggested_schemes.append({
-            "name": scheme["scheme_name"],
-            "link": scheme["link"] if scheme["link"] else "#",
-            "tags": scheme["tags"].split(",") if scheme["tags"] else [],
-            "missing_documents": scheme["missing_documents"]
-        })
+    # # Format suggested schemes
+    # suggested_schemes = []
+    # for scheme in suggested_raw:
+    #     suggested_schemes.append({
+    #         "name": scheme["scheme_name"],
+    #         "link": scheme["link"] if scheme["link"] else "#",
+    #         "tags": scheme["tags"].split(",") if scheme["tags"] else [],
+    #         "missing_documents": scheme["missing_documents"]
+    #     })
 
-    # Format available schemes  
-    available_schemes = []
-    for scheme in available_raw:
-        available_schemes.append({
-            "name": scheme["scheme_name"], 
-            "link": scheme["link"] if scheme["link"] else "#",
-            "tags": scheme["tags"].split(",") if scheme["tags"] else []
-        })
+    # # Format available schemes  
+    # available_schemes = []
+    # for scheme in available_raw:
+    #     available_schemes.append({
+    #         "name": scheme["scheme_name"], 
+    #         "link": scheme["link"] if scheme["link"] else "#",
+    #         "tags": scheme["tags"].split(",") if scheme["tags"] else []
+    #     })
 
-    return render_template('index.html', 
-                         suggested_schemes=suggested_schemes,
-                         available_schemes=available_schemes)
+    # return render_template('index.html', 
+    #                      suggested_schemes=suggested_schemes,
+    #                      available_schemes=available_schemes)
+    schemes = [
+        {
+            "name": "Pradhan Mantri Jan Dhan Yojana",
+            "link": "https://pmjdy.gov.in/",
+            "tags": ["financial", "inclusion"]
+        },
+        {
+            "name": "Ayushman Bharat",
+            "link": "https://www.pmjay.gov.in/",
+            "tags": ["medical", "healthcare"]
+        },
+        {
+            "name": "Pradhan Mantri Awas Yojana",
+            "link": "https://pmaymis.gov.in/",
+            "tags": ["housing", "urban development"]
+        },
+        {
+            "name": "National Scholarship Portal",
+            "link": "https://scholarships.gov.in/",
+            "tags": ["education", "scholarship"]
+        },
+        {
+            "name": "Atal Pension Yojana",
+            "link": "https://npscra.nsdl.co.in/scheme-details/APY.php",
+            "tags": ["financial", "pension"]
+        }
+    ]
+    return render_template('index.html', schemes=schemes)
+
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -177,6 +207,33 @@ def register():
 
             # Commit the transaction
             db.execute("COMMIT")
+            
+            # url = "https://f5ea-34-30-83-243.ngrok-free.app"
+            # payload = {
+            # "query": f"{full_name} {gender} {state} {age} {marital_status} {children_details}",
+            # "documents": "Aadhaar card, Birth certificate"
+            # }
+            # response = requests.post(url, json=payload)
+
+            # if response.status_code == 200:
+            #     data = response.json()
+            #     recommendations = data.get('recommendations', [])
+            #     suggestions = data.get('suggestions', [])
+                
+            #     for scheme_id in recommendations:
+            #         scheme = db.execute("SELECT scheme_name FROM schemes WHERE id = ?", scheme_id)
+            #         scheme_name = scheme[0]["scheme_name"] if scheme else "Unknown Scheme"
+            #         db.execute(
+            #             "INSERT OR IGNORE INTO scheme_available (user_id, scheme_id, scheme_name) VALUES (?, ?, ?)",
+            #             user_id, scheme_id, scheme_name
+            #         )
+
+            #     for suggestion in suggestions:
+            #         for scheme_id, missing_docs in suggestion.items():
+            #             db.execute(
+            #                 "INSERT OR IGNORE INTO scheme_suggested (user_id, scheme_id, scheme_name, missing_documents) VALUES (?, ?, ?, ?)",
+            #                 user_id, scheme_id, scheme_name, ",".join(missing_docs)
+            #             )
 
         except Exception as e:
             # Rollback the transaction in case of error
@@ -252,6 +309,70 @@ def verify_document():
 
     # Insert the document-user relationship into the user_doc table
     db.execute("INSERT INTO user_doc (user_id, document_id) VALUES (?, ?)", session["user_id"], document_id)
+    # Retrieve user details from the database
+    # user_details = db.execute("""
+    #     SELECT up.name, up.dob, up.sex, up.phone_number, us.address, us.email, us.aadhar, us.PAN, us.disability, us.ration_card, us.marital_status, us.spouse_details, us.child_details
+    #     FROM user_primary_data up
+    #     JOIN user_secondary_data us ON up.user_id = us.user_id
+    #     WHERE up.user_id = ?
+    # """, session["user_id"])
+
+    # if not user_details:
+    #     return {"error": "User details not found"}, 404
+
+    # user_details = user_details[0]
+    # full_name = user_details["name"]
+    # gender = user_details["sex"]
+    # dob = user_details["dob"]
+    # phone_number = user_details["phone_number"]
+    # address = user_details["address"]
+    # email = user_details["email"]
+    # aadhar = user_details["aadhar"]
+    # pan = user_details["PAN"]
+    # disability = user_details["disability"]
+    # ration_card = user_details["ration_card"]
+    # marital_status = user_details["marital_status"]
+    # spouse_details = user_details["spouse_details"]
+    # child_details = user_details["child_details"]
+    # user_id=session["user_id"]
+
+    # url = "https://f5ea-34-30-83-243.ngrok-free.app/recommendation"
+    # # Retrieve all documents the user has
+    # user_documents = db.execute("""
+    #     SELECT d.document_name
+    #     FROM document d
+    #     JOIN user_doc ud ON d.id = ud.document_id
+    #     WHERE ud.user_id = ?
+    # """, session["user_id"])
+
+    # document_names = [doc["document_name"] for doc in user_documents]
+
+    # payload = {
+    #     "query": f"{full_name} {gender} {dob} {phone_number} {address} {email} {aadhar} {pan} {disability} {ration_card} {marital_status} {spouse_details} {child_details}",
+    #     "documents": ",".join(document_names)
+    # }
+    # response = requests.post(url, json=payload)
+
+    # if response.status_code == 200:
+    #     data = response.json()
+    #     recommendations = data.get('recommendations', [])
+    #     suggestions = data.get('suggestions', [])
+    #     for scheme_id in recommendations:
+    #         scheme = db.execute("SELECT scheme_name FROM schemes WHERE id = ?", scheme_id)
+    #         scheme_name = scheme[0]["scheme_name"] if scheme else "Unknown Scheme"
+    #         db.execute(
+    #             "INSERT OR IGNORE INTO scheme_available (user_id, scheme_id, scheme_name) VALUES (?, ?, ?)",
+    #             user_id, scheme_id, scheme_name
+    #         )
+
+    #     for suggestion in suggestions:
+    #         for scheme_id, missing_docs in suggestion.items():
+    #             db.execute(
+    #                 "INSERT OR IGNORE INTO scheme_suggested (user_id, scheme_id, scheme_name, missing_documents) VALUES (?, ?, ?, ?)",
+    #                 user_id, scheme_id, scheme_name, ",".join(missing_docs)
+    #             )
+    # else:
+    #     print("Error:", response.status_code, response.text)
 
     return {"message": "Document verified and stored successfully"}, 200
 
