@@ -5,7 +5,10 @@ import os
 import google.generativeai as genai
 from documents_key import document_keywords
 
-genai.configure(api_key="AIzaSyCfbu9boxtqPch9pR8GHukty8z2bPSXopU")
+_api_key = os.environ.get("GEMINI_API_KEY")
+if not _api_key:
+    raise EnvironmentError("GEMINI_API_KEY environment variable is not set. Please set it before running the application.")
+genai.configure(api_key=_api_key)
 
 # Load the CSV data
 data = pd.read_csv("/workspaces/SchemeSaathi/Model/query_classification_with_additional_queries.csv" , encoding='latin-1')
