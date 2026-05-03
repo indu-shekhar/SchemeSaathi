@@ -1,0 +1,25 @@
+# Environment variables
+.env
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+dist/
+build/
+
+# Flask session files
+flask_session/
+
+# Database
+*.db
+
+# Uploads
+uploads/
+
+# Virtual environment
+venv/
+env/
+.venv/
